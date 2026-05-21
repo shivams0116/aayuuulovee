@@ -1,0 +1,1569 @@
+/* ==========================================================================
+   DESIGN SYSTEM & VARIABLES
+   ========================================================================== */
+:root {
+    /* Color Palette */
+    --color-blush: #ffdcdb;
+    --color-blush-dark: #ffb3b0;
+    --color-blush-glow: rgba(255, 179, 176, 0.4);
+    
+    --color-lavender: #f3e8ff;
+    --color-lavender-dark: #d8b4fe;
+    
+    --color-cream: #faf8f5;
+    --color-beige: #f5f0eb;
+    
+    --color-text-dark: #4a3e3d;
+    --color-text-muted: #706261;
+    --color-text-light: #ffffff;
+    
+    --color-night-bg: #150f24;
+    --color-night-card: rgba(29, 21, 49, 0.5);
+    --color-night-border: rgba(255, 255, 255, 0.12);
+    
+    /* Font stacks */
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Quicksand', system-ui, -apple-system, sans-serif;
+    --font-script: 'Caveat', cursive;
+    
+    /* Animation timings */
+    --ease-out-back: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-smooth: all 0.4s ease;
+    --transition-slow: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-sans);
+    color: var(--color-text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Soft sunrise-to-night vertical background gradient */
+    background: linear-gradient(180deg, 
+        #faf6f6 0%, 
+        #fbf1f5 15%, 
+        #f6eefc 35%, 
+        #e2d2fe 55%, 
+        #2d1d4c 75%, 
+        #150f24 100%
+    );
+    background-size: 100% 100%;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #faf6f6;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-blush-dark);
+    border-radius: 5px;
+    border: 2px solid #faf6f6;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ff9995;
+}
+
+/* Canvas Background */
+#particles-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Ambient overlay glow */
+.ambient-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(255, 220, 219, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(216, 180, 254, 0.12) 0%, transparent 50%);
+}
+
+main {
+    position: relative;
+    z-index: 3;
+}
+
+/* ==========================================================================
+   GLASSMORPHISM STYLING
+   ========================================================================== */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.38);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 8px 32px 0 rgba(255, 179, 176, 0.08);
+    border-radius: 24px;
+    transition: var(--transition-smooth);
+}
+
+.glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 12px 40px 0 rgba(255, 179, 176, 0.15);
+}
+
+/* Darker Glassmorphism for twilight sections */
+.miss-section .glass-panel,
+.letter-section .glass-panel,
+.interactive-section .glass-panel,
+.music-section .glass-panel {
+    background: rgba(255, 255, 255, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 32px 0 rgba(112, 98, 97, 0.06);
+}
+
+/* Night theme styling for letters and interactive components */
+.letter-section .envelope-paper.glass-panel {
+    background: #fffdfc;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+}
+
+.music-section .glass-panel,
+.interactive-section .glass-panel {
+    background: rgba(25, 18, 44, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    color: var(--color-lavender);
+}
+
+/* ==========================================================================
+   FLOATING HEADER & MUSIC MINI STATUS
+   ========================================================================== */
+.floating-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2.5rem;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Change header style when scrolled down to night mode */
+body.scrolled-night .floating-header {
+    background: rgba(21, 15, 36, 0.35);
+    border-color: rgba(255, 255, 255, 0.05);
+    color: var(--color-lavender);
+}
+
+.floating-header .logo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+body.scrolled-night .floating-header .logo {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(216, 180, 254, 0.4);
+}
+
+.pulse-sparkle {
+    display: inline-block;
+    animation: sparkle-pulse 2s infinite ease-in-out;
+}
+
+@keyframes sparkle-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 5px #ffd700); }
+}
+
+.mini-player-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: var(--transition-smooth);
+}
+
+body.scrolled-night .mini-player-indicator {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-lavender);
+}
+
+.mini-player-indicator:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.6);
+}
+
+body.scrolled-night .mini-player-indicator:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.playing-bar {
+    width: 3px;
+    height: 12px;
+    background-color: var(--color-blush-dark);
+    border-radius: 2px;
+    display: inline-block;
+    transform-origin: bottom;
+}
+
+body.scrolled-night .playing-bar {
+    background-color: var(--color-lavender-dark);
+}
+
+/* Playing Animation (controlled by JS toggle class 'playing') */
+.mini-player-indicator.playing .bar-1 { animation: sound-wave 1.2s infinite ease-in-out alternate; }
+.mini-player-indicator.playing .bar-2 { animation: sound-wave 0.8s infinite ease-in-out alternate 0.2s; }
+.mini-player-indicator.playing .bar-3 { animation: sound-wave 1s infinite ease-in-out alternate 0.4s; }
+
+@keyframes sound-wave {
+    0% { transform: scaleY(0.3); }
+    100% { transform: scaleY(1.3); }
+}
+
+.music-note-icon {
+    font-size: 0.9rem;
+    margin-left: 2px;
+}
+
+/* ==========================================================================
+   SECTIONS GENERAL
+   ========================================================================== */
+.section {
+    padding: 8rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--color-text-dark);
+}
+
+body.scrolled-night .section-title {
+    color: #fff;
+    text-shadow: 0 0 15px rgba(216, 180, 254, 0.3);
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 4rem;
+}
+
+body.scrolled-night .section-subtitle {
+    color: var(--color-lavender-dark);
+}
+
+/* Scroll Reveal Effect Class */
+.reveal-effect {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s cubic-bezier(0.215, 0.610, 0.355, 1),
+                transform 1s cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+
+.reveal-effect.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6rem 1.5rem 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+}
+
+.heart-container {
+    margin-bottom: 2rem;
+}
+
+.beating-heart {
+    width: 65px;
+    height: 65px;
+    fill: var(--color-blush-dark);
+    filter: drop-shadow(0 0 10px var(--color-blush-glow));
+    animation: heart-pulse 2s infinite cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+
+@keyframes heart-pulse {
+    0% { transform: scale(1); }
+    12% { transform: scale(1.18); }
+    24% { transform: scale(1.02); }
+    36% { transform: scale(1.15); }
+    50% { transform: scale(1); }
+    100% { transform: scale(1); }
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--color-text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.heart-icon-text {
+    display: inline-block;
+    animation: heart-pulse 2s infinite ease-in-out;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+    margin-bottom: 3.5rem;
+    max-width: 580px;
+}
+
+/* Live Counter Card */
+.counter-card {
+    padding: 2.2rem 3rem;
+    width: 100%;
+    max-width: 520px;
+    margin-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.counter-label {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-text-muted);
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+}
+
+.counter-numbers {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.counter-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
+}
+
+.count-value {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
+    background: linear-gradient(135deg, var(--color-text-dark) 0%, #8c7371 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.count-text {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+    text-transform: lowercase;
+}
+
+.counter-infinite {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-top: 0.4rem;
+}
+
+/* Down Arrow */
+.scroll-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-text-muted);
+    transition: var(--transition-smooth);
+    margin-top: 1rem;
+}
+
+.scroll-arrow:hover {
+    color: var(--color-blush-dark);
+    transform: translateY(4px);
+}
+
+.arrow-dot {
+    width: 6px;
+    height: 6px;
+    background-color: currentColor;
+    border-radius: 50%;
+    margin-bottom: 6px;
+    animation: bounce 2s infinite ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+}
+
+/* Slide in animations for Hero */
+.animate-fade-in {
+    opacity: 0;
+    animation: fade-in 1.2s forwards 0.2s;
+}
+.animate-slide-up {
+    opacity: 0;
+    transform: translateY(25px);
+    animation: slide-up 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }
+
+@keyframes fade-in {
+    to { opacity: 1; }
+}
+@keyframes slide-up {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   SECTION 1: REASONS I ADORE YOU
+   ========================================================================== */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.2rem;
+    width: 100%;
+}
+
+.adore-card {
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 28px;
+    /* Gentle floating animation */
+    animation: card-sway 6s infinite ease-in-out alternate;
+}
+
+/* Offset animation timing for organic feel */
+.cards-grid > div:nth-child(2) { animation-delay: -2s; }
+.cards-grid > div:nth-child(3) { animation-delay: -4s; }
+
+@keyframes card-sway {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-8px); }
+}
+
+.adore-card:hover {
+    transform: translateY(-15px) scale(1.02) !important;
+    animation-play-state: paused;
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.8rem;
+    transition: var(--transition-smooth);
+}
+
+.smile-icon { 
+    background: #ffebe9; 
+    color: #ff8883; 
+    box-shadow: 0 8px 20px rgba(255, 136, 131, 0.15);
+}
+.peace-icon { 
+    background: #f3ebff; 
+    color: #b781ff; 
+    box-shadow: 0 8px 20px rgba(183, 129, 255, 0.15);
+}
+.silence-icon { 
+    background: #fff8eb; 
+    color: #ffb84d; 
+    box-shadow: 0 8px 20px rgba(255, 184, 77, 0.15);
+}
+
+.adore-card:hover .card-icon {
+    transform: scale(1.15) rotate(5deg);
+}
+
+.adore-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--color-text-dark);
+}
+
+.adore-card p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+}
+
+.sparkle-decor {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 1.2rem;
+    opacity: 0.3;
+    transition: var(--transition-smooth);
+}
+
+.adore-card:hover .sparkle-decor {
+    opacity: 0.8;
+    transform: scale(1.3) rotate(15deg);
+    animation: sparkle-glow 1.5s infinite alternate;
+}
+
+@keyframes sparkle-glow {
+    0% { filter: drop-shadow(0 0 2px #fff); }
+    100% { filter: drop-shadow(0 0 8px #ffd700); }
+}
+
+/* ==========================================================================
+   SECTION 2: THINGS I MISS (TIMELINE)
+   ========================================================================== */
+.timeline-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem 0;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, 
+        rgba(255, 179, 176, 0.5) 0%, 
+        rgba(216, 180, 254, 0.5) 50%, 
+        rgba(255, 255, 255, 0.15) 100%
+    );
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    width: 100%;
+    margin-bottom: 5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.timeline-item:nth-child(even) {
+    justify-content: flex-start;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 50%;
+    top: 25px;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(5px);
+    border: 2px solid var(--color-blush-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    transition: var(--transition-smooth);
+}
+
+.timeline-item:nth-child(even) .timeline-dot {
+    border-color: var(--color-lavender-dark);
+}
+
+.dot-inner {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-blush-dark);
+    transition: var(--transition-smooth);
+}
+
+.timeline-item:nth-child(even) .dot-inner {
+    background: var(--color-lavender-dark);
+}
+
+.timeline-item:hover .timeline-dot {
+    transform: translateX(-50%) scale(1.3);
+    box-shadow: 0 0 15px rgba(255, 179, 176, 0.5);
+}
+
+.timeline-item:hover .dot-inner {
+    background: #ff7872;
+}
+
+.timeline-content {
+    width: 44%;
+    padding: 2.2rem 2.5rem;
+    position: relative;
+    border-radius: 22px;
+}
+
+.timeline-content:hover {
+    transform: translateY(-5px);
+}
+
+.timeline-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+    transition: var(--transition-smooth);
+}
+
+.timeline-item:hover .timeline-icon {
+    transform: scale(1.2) rotate(-8deg);
+}
+
+.timeline-content h3 {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+}
+
+.timeline-content p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+}
+
+body.scrolled-night .timeline-content p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   SECTION 3: A LITTLE LETTER (3D ENVELOPE)
+   ========================================================================== */
+.envelope-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    height: 420px;
+    margin: 3rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.envelope {
+    position: relative;
+    width: 520px;
+    height: 320px;
+    background: #fdf5f2;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    perspective: 1000px;
+    transition: transform 0.6s ease;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Envelope Flap */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 260px solid transparent;
+    border-right: 260px solid transparent;
+    border-top: 160px solid #fbdad0;
+    transform-origin: top;
+    transition: transform 0.6s ease, z-index 0.2s ease 0.3s;
+    z-index: 30;
+}
+
+/* Left, Right and Bottom Folds of Envelope (Flat design via borders) */
+.envelope::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 260px solid #faece6;
+    border-right: 260px solid transparent;
+    border-bottom: 160px solid #faece6;
+    border-radius: 0 0 0 12px;
+    z-index: 25;
+}
+
+.envelope::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-right: 260px solid #faece6;
+    border-left: 260px solid transparent;
+    border-bottom: 160px solid #faece6;
+    border-radius: 0 0 12px 0;
+    z-index: 25;
+}
+
+/* Inner bottom fold overlay to hide bottom edge gap */
+.envelope-base-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 160px;
+    background: #faece6;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    z-index: 24;
+}
+
+/* The Letter Paper inside */
+.envelope-paper {
+    position: absolute;
+    bottom: 10px;
+    left: 25px;
+    width: 470px;
+    height: 280px;
+    z-index: 15;
+    padding: 2.2rem;
+    overflow-y: auto;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                height 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                z-index 0.2s ease 0.2s;
+    /* Soft handwriting textured background */
+    background: #fffdfb;
+    border-radius: 8px;
+    border: 1px dashed rgba(255, 179, 176, 0.4);
+}
+
+/* Letter Open Animation Classes */
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 5; /* Moves behind the letter */
+}
+
+.envelope.open .envelope-paper {
+    transform: translateY(-240px);
+    height: 480px;
+    z-index: 40; /* Pulls out in front */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    background: #fffefb;
+    border: 1px solid rgba(255, 179, 176, 0.3);
+}
+
+.envelope.open {
+    transform: translateY(120px);
+}
+
+/* Beautiful Handwritten Letter Text */
+.letter-text {
+    font-family: var(--font-script);
+    font-size: 1.45rem;
+    line-height: 1.6;
+    color: #483d3c;
+    text-align: left;
+    white-space: pre-line;
+}
+
+/* Letter opening trigger button */
+.envelope-trigger-btn {
+    position: absolute;
+    bottom: 25px;
+    z-index: 50;
+    cursor: pointer;
+    background: var(--color-blush-dark);
+    color: #fff;
+    padding: 0.9rem 2.2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 25px rgba(255, 179, 176, 0.4);
+    border: none;
+    transition: var(--transition-smooth);
+}
+
+.envelope-trigger-btn:hover {
+    transform: scale(1.05) translateY(-3px);
+    background: #ff9d99;
+    box-shadow: 0 12px 30px rgba(255, 179, 176, 0.6);
+}
+
+.envelope-trigger-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8) translateY(20px);
+}
+
+/* Style for scrollbar in the letter paper */
+.envelope-paper::-webkit-scrollbar {
+    width: 6px;
+}
+.envelope-paper::-webkit-scrollbar-track {
+    background: transparent;
+}
+.envelope-paper::-webkit-scrollbar-thumb {
+    background: rgba(255, 179, 176, 0.3);
+    border-radius: 3px;
+    border: none;
+}
+
+/* ==========================================================================
+   SECTION 4: CUTE INTERACTIVE HUG
+   ========================================================================== */
+.interactive-container {
+    width: 100%;
+    max-width: 650px;
+    padding: 4rem 3rem;
+    text-align: center;
+    border-radius: 32px;
+}
+
+.interactive-title {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    color: #fff;
+}
+
+.interactive-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+    color: var(--color-lavender-dark);
+}
+
+/* Glowing Hug Button */
+.hug-button {
+    background: linear-gradient(135deg, var(--color-blush-dark) 0%, var(--color-lavender-dark) 100%);
+    border: none;
+    color: #fff;
+    padding: 1.1rem 2.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 25px rgba(255, 179, 176, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 0 auto 1.5rem auto;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.hug-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transition: 0.5s;
+}
+
+.hug-button:hover::before {
+    left: 100%;
+}
+
+.hug-button:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 35px rgba(255, 179, 176, 0.7);
+}
+
+.hug-button:active {
+    transform: scale(0.96);
+}
+
+.btn-stars, .btn-heart {
+    font-size: 1rem;
+}
+
+/* Button Shake / Vibration Animation */
+.hug-button.vibrate {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0) scale(1.04); }
+    20%, 80% { transform: translate3d(2px, 0, 0) scale(1.04); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0) scale(1.04); }
+    40%, 60% { transform: translate3d(4px, 0, 0) scale(1.04); }
+}
+
+/* Hug Response Message */
+.hug-response {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.8s ease, opacity 0.8s ease;
+    margin-top: 0;
+}
+
+.hug-response.visible {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: 2rem;
+}
+
+.hug-emoji {
+    font-size: 3.5rem;
+    display: inline-block;
+    animation: wave-sway 2s infinite ease-in-out alternate;
+}
+
+@keyframes wave-sway {
+    0% { transform: rotate(-5deg) scale(1); }
+    100% { transform: rotate(5deg) scale(1.1); }
+}
+
+.hug-text {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin: 0.8rem 0 0.4rem 0;
+    color: #fff;
+}
+
+.hug-subtext {
+    font-size: 0.95rem;
+    color: var(--color-lavender-dark);
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+/* Explosive Floating Hearts */
+.exploding-heart {
+    position: fixed;
+    z-index: 1000;
+    pointer-events: none;
+    font-size: 1.5rem;
+    animation: fly-and-fade 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+@keyframes fly-and-fade {
+    0% {
+        transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(var(--scale)) rotate(var(--rot));
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   SECTION 5: MUSIC PLAYER
+   ========================================================================== */
+.music-container {
+    width: 100%;
+    max-width: 720px;
+    padding: 3.5rem 3rem;
+    border-radius: 32px;
+    text-align: center;
+}
+
+.music-title {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    color: #fff;
+}
+
+.music-subtitle {
+    font-size: 1.05rem;
+    color: var(--color-lavender-dark);
+    margin-bottom: 3rem;
+}
+
+.player-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 3.5rem;
+    text-align: left;
+}
+
+/* Vinyl Disc styling */
+.vinyl-container {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    flex-shrink: 0;
+}
+
+.vinyl {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    /* Vinyl record simulation background */
+    background: radial-gradient(circle, #2d233c 20%, #0d0617 40%, #150f22 50%, #05020a 70%);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4), 
+                inset 0 0 0 5px rgba(255, 255, 255, 0.05),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    transition: transform 0.5s ease;
+    animation: rotate-vinyl 15s linear infinite paused;
+}
+
+.vinyl-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffdcdb 30%, #ffb3b0 80%);
+    border: 3px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vinyl-center::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #110920;
+    border-radius: 50%;
+}
+
+/* Spin animation for playing state */
+.vinyl.playing {
+    animation-play-state: running;
+}
+
+@keyframes rotate-vinyl {
+    100% { transform: rotate(360deg); }
+}
+
+/* Floating Music Notes */
+.music-note-float {
+    position: absolute;
+    top: 40%;
+    left: 45%;
+    font-size: 1.3rem;
+    color: var(--color-lavender-dark);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.vinyl.playing ~ .float-1 { animation: float-note 3.5s infinite linear; }
+.vinyl.playing ~ .float-2 { animation: float-note 3.8s infinite linear 1.2s; }
+.vinyl.playing ~ .float-3 { animation: float-note 4.2s infinite linear 2.4s; }
+
+@keyframes float-note {
+    0% {
+        transform: translate(0, 0) scale(0.6) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(-40px, -50px) scale(1) rotate(-15deg);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(-80px, -110px) scale(0.8) rotate(20deg);
+        opacity: 0;
+    }
+}
+
+/* Player Interface details */
+.player-controls {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.track-details {
+    margin-bottom: 1.5rem;
+}
+
+.track-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.track-artist {
+    font-size: 0.95rem;
+    color: var(--color-lavender-dark);
+}
+
+/* Progress bar styles */
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-blush-dark) 0%, var(--color-lavender-dark) 100%);
+    border-radius: 4px;
+    position: relative;
+    transition: width 0.1s linear;
+}
+
+.progress-dot {
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255, 179, 176, 0.8);
+    display: none; /* revealed on container hover */
+    pointer-events: none;
+}
+
+.progress-container:hover .progress-dot {
+    display: block;
+}
+
+.time-displays {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--color-lavender-dark);
+    margin-bottom: 1.5rem;
+}
+
+/* Buttons styling */
+.control-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.player-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-lavender);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-btn:hover:not(:disabled) {
+    color: #fff;
+    transform: scale(1.15);
+}
+
+.player-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.btn-play {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--color-night-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.15);
+}
+
+.btn-play:hover {
+    transform: scale(1.1) !important;
+    background: #fff;
+    color: var(--color-night-bg);
+    box-shadow: 0 5px 22px rgba(255, 179, 176, 0.4);
+}
+
+.btn-play svg {
+    margin-left: 2px;
+}
+
+/* when playing pause icon visible */
+.btn-play.playing svg {
+    margin-left: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Volume Slider */
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 60%;
+}
+
+.volume-icon {
+    font-size: 0.95rem;
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.15);
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.1s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+}
+
+/* ==========================================================================
+   EASTER EGGS - DRIFTING "I MISS YOU" TEXT
+   ========================================================================== */
+.drifting-text {
+    position: fixed;
+    z-index: 99;
+    color: rgba(255, 255, 255, 0.28);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    pointer-events: none;
+    animation: drift-up-and-fade 8s linear forwards;
+    letter-spacing: 1px;
+}
+
+/* Shifting to warm pink in light top sections */
+body.scrolled-light .drifting-text {
+    color: rgba(255, 179, 176, 0.3);
+}
+
+@keyframes drift-up-and-fade {
+    0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.65;
+    }
+    90% {
+        opacity: 0.65;
+    }
+    100% {
+        transform: translateY(-10vh) translateX(var(--drift-x, 30px));
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.footer {
+    padding: 5rem 2rem;
+    text-align: center;
+    background: #110a1f;
+    position: relative;
+    z-index: 5;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-text {
+    color: var(--color-lavender-dark);
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.5px;
+}
+
+.footer-star {
+    display: inline-block;
+    animation: sparkle-pulse 2s infinite ease-in-out alternate;
+}
+
+.footer-decoration {
+    font-size: 1.2rem;
+}
+
+.heart-pulse {
+    display: inline-block;
+    animation: heart-pulse 2s infinite cubic-bezier(0.215, 0.610, 0.355, 1);
+}
+
+/* ==========================================================================
+   SCROLL SPARKLES IN THINGS I MISS
+   ========================================================================== */
+.scroll-sparkle {
+    position: absolute;
+    z-index: 4;
+    pointer-events: none;
+    font-size: 0.95rem;
+    color: #ffe680;
+    text-shadow: 0 0 5px rgba(255, 230, 128, 0.8), 0 0 10px rgba(255, 230, 128, 0.4);
+    animation: sparkle-fade-out 0.8s ease-out forwards;
+}
+
+@keyframes sparkle-fade-out {
+    0% {
+        transform: scale(0.2) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(90deg);
+    }
+    100% {
+        transform: scale(0.5) rotate(180deg) translateY(-25px);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (MOBILE FIRST)
+   ========================================================================== */
+
+/* Up to Tablet (Landscape) */
+@media screen and (max-width: 900px) {
+    .section-title {
+        font-size: 2.5rem;
+    }
+    
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1.8rem;
+        max-width: 450px;
+        margin: 0 auto;
+    }
+    
+    .adore-card {
+        padding: 2.5rem 1.8rem;
+    }
+    
+    .player-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .player-controls {
+        width: 100%;
+    }
+    
+    .volume-container {
+        width: 80%;
+        margin: 0 auto;
+    }
+    
+    .control-buttons {
+        justify-content: center;
+    }
+}
+
+/* Small screen mobile devices */
+@media screen and (max-width: 580px) {
+    html {
+        font-size: 14px;
+    }
+    
+    .floating-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .section {
+        padding: 5rem 1.2rem;
+    }
+    
+    .hero-title {
+        font-size: 2.6rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+    }
+    
+    .counter-card {
+        padding: 1.8rem 1.5rem;
+    }
+    
+    .counter-numbers {
+        gap: 0.8rem;
+    }
+    
+    .counter-unit {
+        min-width: 55px;
+    }
+    
+    .count-value {
+        font-size: 1.8rem;
+    }
+    
+    /* Timeline Mobile adjustments (Single-column layout) */
+    .timeline-line {
+        left: 20px;
+    }
+    
+    .timeline-dot {
+        left: 20px;
+    }
+    
+    .timeline-item {
+        justify-content: flex-end !important;
+        margin-bottom: 3.5rem;
+    }
+    
+    .timeline-content {
+        width: calc(100% - 45px);
+        padding: 1.5rem;
+    }
+    
+    /* Envelope scaling for small screen widths */
+    .envelope-wrapper {
+        height: 380px;
+        max-width: 100%;
+        padding: 0 10px;
+    }
+    
+    .envelope {
+        width: 100%;
+        height: 240px;
+    }
+    
+    .envelope-flap {
+        border-left-width: 175px; /* dynamically matched via js if viewport small */
+        border-right-width: 175px;
+        border-top-width: 120px;
+    }
+    
+    .envelope::before, .envelope::after {
+        border-left-width: 175px;
+        border-right-width: 175px;
+        border-bottom-width: 120px;
+    }
+    
+    .envelope-paper {
+        width: calc(100% - 30px);
+        left: 15px;
+        height: 200px;
+        padding: 1.5rem;
+    }
+    
+    .envelope.open .envelope-paper {
+        transform: translateY(-160px);
+        height: 360px;
+    }
+    
+    .envelope.open {
+        transform: translateY(80px);
+    }
+    
+    .letter-text {
+        font-size: 1.25rem;
+    }
+    
+    .interactive-container {
+        padding: 2.5rem 1.5rem;
+    }
+    
+    .music-container {
+        padding: 2.5rem 1.5rem;
+    }
+    
+    .vinyl-container {
+        width: 140px;
+        height: 140px;
+    }
+}

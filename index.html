@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endlessly Loving You ❤️</title>
+    
+    <!-- Meta tags for romantic touch and SEO/testing -->
+    <meta name="description" content="A dreamy tribute for the one who holds my heart. I miss you and I love you endlessly.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Starry & Heart Canvas Background -->
+    <canvas id="particles-canvas"></canvas>
+    
+    <!-- Overlay for subtle vignette/glowing grid -->
+    <div class="ambient-glow"></div>
+
+    <!-- Floating Top Music Bar (Sticky / Minimalist) -->
+    <div class="floating-header">
+        <div class="logo">For My Favorite Person <span class="pulse-sparkle">✨</span></div>
+        <a href="#music-section" class="mini-player-indicator" id="mini-player-trigger">
+            <span class="playing-bar bar-1"></span>
+            <span class="playing-bar bar-2"></span>
+            <span class="playing-bar bar-3"></span>
+            <span class="music-note-icon">🎵</span>
+        </a>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <main>
+        
+        <!-- HERO SECTION -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <div class="heart-container animate-fade-in">
+                    <!-- Beating Heart SVG -->
+                    <svg class="beating-heart" viewBox="0 0 32 32">
+                        <path d="M16 28.5C16 28.5 2 20.5 2 11.5C2 6.5 6 2.5 11 2.5C14 2.5 15.5 4.5 16 5.5C16.5 4.5 18 2.5 21 2.5C26 2.5 30 6.5 30 11.5C30 20.5 16 28.5 16 28.5Z"/>
+                    </svg>
+                </div>
+                
+                <h1 class="hero-title animate-slide-up">
+                    Every little thing reminds me of you <span class="heart-icon-text">❤️</span>
+                </h1>
+                
+                <p class="hero-subtitle animate-slide-up delay-1">
+                    Distance only makes me realize how deeply I love and miss you.
+                </p>
+                
+                <!-- Live Counter Card -->
+                <div class="counter-card glass-panel animate-slide-up delay-2" id="counter-card">
+                    <p class="counter-label">Loving you for</p>
+                    <div class="counter-numbers">
+                        <div class="counter-unit">
+                            <span class="count-value" id="count-days">0000</span>
+                            <span class="count-text">days</span>
+                        </div>
+                        <div class="counter-unit">
+                            <span class="count-value" id="count-hours">00</span>
+                            <span class="count-text">hours</span>
+                        </div>
+                        <div class="counter-unit">
+                            <span class="count-value" id="count-minutes">00</span>
+                            <span class="count-text">mins</span>
+                        </div>
+                        <div class="counter-unit">
+                            <span class="count-value" id="count-seconds">00</span>
+                            <span class="count-text">secs</span>
+                        </div>
+                    </div>
+                    <p class="counter-infinite">...and infinite days ❤️</p>
+                </div>
+                
+                <a href="#adore-section" class="scroll-arrow" aria-label="Scroll down">
+                    <span class="arrow-dot"></span>
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- SECTION 1: Reasons I Adore You -->
+        <section id="adore-section" class="section adore-section">
+            <h2 class="section-title reveal-effect">Reasons I Adore You</h2>
+            <p class="section-subtitle reveal-effect">Just a few of the infinite things that make me fall for you every single day...</p>
+            
+            <div class="cards-grid">
+                <!-- Card 1 -->
+                <div class="adore-card glass-panel reveal-effect">
+                    <div class="card-icon smile-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                            <line x1="9" y1="9" x2="9.01" y2="9"/>
+                            <line x1="15" y1="9" x2="15.01" y2="9"/>
+                        </svg>
+                    </div>
+                    <h3>Your Smile</h3>
+                    <p>Your smile fixes my worst days. It has this magical way of making everything else disappear.</p>
+                    <span class="sparkle-decor">✨</span>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="adore-card glass-panel reveal-effect">
+                    <div class="card-icon peace-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 10H11v-4h2v4zm0 4H11v-2h2v2z" style="display:none;"/>
+                            <!-- custom peace/cloud svg path -->
+                            <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.07-1.22.2A6 6 0 0 0 3.5 14c0 2.76 2.24 5 5 5h9z"/>
+                        </svg>
+                    </div>
+                    <h3>You Feel Like Peace</h3>
+                    <p>No matter how chaotic the world gets, talking to you instantly brings me back to a safe, quiet shore.</p>
+                    <span class="sparkle-decor">✨</span>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="adore-card glass-panel reveal-effect">
+                    <div class="card-icon silence-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                            <path d="M12 2v20M17 5v14M22 9v6M7 7v10M2 10v4"/>
+                        </svg>
+                    </div>
+                    <h3>Special Silence</h3>
+                    <p>Even silence feels special with you. We don't need words to feel completely connected and at home.</p>
+                    <span class="sparkle-decor">✨</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Things I Miss -->
+        <section id="miss-section" class="section miss-section">
+            <h2 class="section-title reveal-effect">Things I Miss</h2>
+            <p class="section-subtitle reveal-effect">Every moment away from you is a moment spent wishing you were right next to me...</p>
+            
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                
+                <!-- Timeline Item 1 -->
+                <div class="timeline-item reveal-effect">
+                    <div class="timeline-dot">
+                        <span class="dot-inner"></span>
+                    </div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-icon">🌸</div>
+                        <h3>Your Laugh</h3>
+                        <p>The bright, sweet sound that echoes in my mind and instantly makes my heart skip a beat.</p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="timeline-item reveal-effect">
+                    <div class="timeline-dot">
+                        <span class="dot-inner"></span>
+                    </div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-icon">📞</div>
+                        <h3>Our Calls</h3>
+                        <p>Losing track of time for hours, talking about everything and absolutely nothing at all.</p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="timeline-item reveal-effect">
+                    <div class="timeline-dot">
+                        <span class="dot-inner"></span>
+                    </div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-icon">💫</div>
+                        <h3>Your Voice</h3>
+                        <p>The soft, comforting tone that acts like a warm blanket on my coldest, hardest days.</p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 4 -->
+                <div class="timeline-item reveal-effect">
+                    <div class="timeline-dot">
+                        <span class="dot-inner"></span>
+                    </div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-icon">🌙</div>
+                        <h3>Your Sleepy Goodnight Texts</h3>
+                        <p>The half-asleep texts showing me I'm the very last thing on your mind before you drift off to sleep.</p>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 5 -->
+                <div class="timeline-item reveal-effect">
+                    <div class="timeline-dot">
+                        <span class="dot-inner"></span>
+                    </div>
+                    <div class="timeline-content glass-panel">
+                        <div class="timeline-icon">🤝</div>
+                        <h3>Holding Your Hand</h3>
+                        <p>The feeling of your fingers intertwined with mine, matching perfectly, like we were meant to be.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: A Little Letter For You -->
+        <section id="letter-section" class="section letter-section">
+            <h2 class="section-title reveal-effect">A Little Letter For You</h2>
+            
+            <div class="envelope-wrapper reveal-effect">
+                <div class="envelope" id="envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-paper glass-panel">
+                        <div class="letter-text" id="typewriter-letter">
+                            <!-- Typewriter text will go here dynamically -->
+                        </div>
+                    </div>
+                    <div class="envelope-base-overlay"></div>
+                </div>
+                <div class="envelope-trigger-btn" id="open-letter-btn">Open My Letter ✉️</div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Cute Interactive Section -->
+        <section id="interactive-section" class="section interactive-section">
+            <div class="interactive-container glass-panel reveal-effect" id="hug-box">
+                <h2 class="interactive-title">Are you missing me right now?</h2>
+                <p class="interactive-subtitle">If you are, tap the button below to send me a little virtual hug...</p>
+                
+                <button class="hug-button" id="hug-btn" aria-label="Tap when you miss me too">
+                    <span class="btn-stars">✨</span>
+                    <span class="btn-text">Tap when you miss me too</span>
+                    <span class="btn-heart">❤️</span>
+                </button>
+                
+                <div class="hug-response" id="hug-response-msg">
+                    <span class="hug-emoji">🫂</span>
+                    <p class="hug-text">Come here, let me hug you</p>
+                    <p class="hug-subtext">A huge, tight hug has been sent straight to your heart. I'm right here with you.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Music Section -->
+        <section id="music-section" class="section music-section">
+            <div class="music-container glass-panel reveal-effect">
+                <h2 class="music-title">Our Soundtrack 🎵</h2>
+                <p class="music-subtitle">A little melody for you to listen to while you read this...</p>
+                
+                <div class="player-wrapper">
+                    <!-- Spinning CD Artwork -->
+                    <div class="vinyl-container">
+                        <div class="vinyl" id="vinyl-disc">
+                            <div class="vinyl-center"></div>
+                        </div>
+                        <div class="music-note-float float-1">♪</div>
+                        <div class="music-note-float float-2">♫</div>
+                        <div class="music-note-float float-3">♬</div>
+                    </div>
+                    
+                    <!-- Player Controls -->
+                    <div class="player-controls">
+                        <div class="track-details">
+                            <h3 class="track-name" id="track-name">Sweet Lofi Symphony</h3>
+                            <p class="track-artist">A Gentle Romantic Escape</p>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                            <div class="progress-dot"></div>
+                        </div>
+                        <div class="time-displays">
+                            <span id="current-time">0:00</span>
+                            <span id="duration-time">2:30</span>
+                        </div>
+                        
+                        <!-- Buttons -->
+                        <div class="control-buttons">
+                            <button class="player-btn btn-prev" aria-label="Previous Track" disabled>
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="currentColor">
+                                    <polygon points="19 20 9 12 19 4 19 20"/>
+                                    <line x1="5" y1="4" x2="5" y2="20"/>
+                                </svg>
+                            </button>
+                            <button class="player-btn btn-play" id="play-pause-btn" aria-label="Play or Pause">
+                                <svg id="play-icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                                <svg id="pause-icon" class="hidden" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="currentColor">
+                                    <rect x="6" y="4" width="4" height="16"/>
+                                    <rect x="14" y="4" width="4" height="16"/>
+                                </svg>
+                            </button>
+                            <button class="player-btn btn-next" aria-label="Next Track" disabled>
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="currentColor">
+                                    <polygon points="5 4 15 12 5 20 5 4"/>
+                                    <line x1="19" y1="4" x2="19" y2="20"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Volume Controls -->
+                        <div class="volume-container">
+                            <span class="volume-icon">🔈</span>
+                            <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="70">
+                            <span class="volume-icon">🔊</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Audio Source -->
+                <!-- We use a high quality copyright-free lofi stream/MP3 track. A romantic acoustic track from Archive.org or soundhelix -->
+                <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p class="footer-text">Made with all my love, just for you <span class="footer-star">✨</span></p>
+        <div class="footer-decoration">
+            <span class="heart-pulse">❤️</span>
+        </div>
+    </footer>
+
+    <!-- JS Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
