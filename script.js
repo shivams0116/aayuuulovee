@@ -774,21 +774,15 @@ function initPolaroidCarousel() {
         if (isAnimating || index === current) return;
         isAnimating = true;
 
-        const dir   = direction !== undefined ? direction : (index > current ? 'next' : 'prev');
-        const prev  = slides[current];
-        const next  = slides[index];
+        // Hide current slide
+        slides[current].classList.remove('active');
 
-        prev.classList.remove('active');
-        prev.classList.add(dir === 'next' ? 'exit-left' : 'exit-right');
-
-        next.classList.add('active');
+        // Show next slide
         current = index;
+        slides[current].classList.add('active');
         updateUI();
 
-        setTimeout(() => {
-            prev.classList.remove('exit-left', 'exit-right');
-            isAnimating = false;
-        }, 560);
+        setTimeout(() => { isAnimating = false; }, 500);
     }
 
     prevBtn.addEventListener('click', () => {

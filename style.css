@@ -1929,51 +1929,32 @@ body.scrolled-light .drifting-text {
 
 .polaroid-stage {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 700px;
+    max-width: 480px;
     margin: 0 auto 1.5rem;
-    min-height: 480px;
+    padding: 0 56px; /* space for the side buttons */
+    box-sizing: border-box;
 }
 
 .polaroid-track {
     width: 100%;
-    position: relative;
-    min-height: 460px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
+/* Hidden slides: completely removed from layout */
 .polaroid-slide {
-    position: absolute;
-    inset: 0;
+    display: none;
+}
+
+/* Active slide: shown with fade-in */
+.polaroid-slide.active {
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.88) rotate(2deg);
-    transition: opacity 0.55s cubic-bezier(0.4,0,0.2,1),
-                transform 0.55s cubic-bezier(0.34,1.2,0.64,1);
+    animation: polaroidAppear 0.45s ease both;
 }
 
-.polaroid-slide.active {
-    opacity: 1;
-    pointer-events: auto;
-    transform: scale(1) rotate(0deg);
-    z-index: 2;
-}
-
-.polaroid-slide.exit-left {
-    opacity: 0;
-    transform: scale(0.9) translateX(-60px) rotate(-4deg);
-}
-
-.polaroid-slide.exit-right {
-    opacity: 0;
-    transform: scale(0.9) translateX(60px) rotate(4deg);
+@keyframes polaroidAppear {
+    from { opacity: 0; transform: scale(0.94) rotate(-1.5deg); }
+    to   { opacity: 1; transform: scale(1)   rotate(0deg);   }
 }
 
 .polaroid {
