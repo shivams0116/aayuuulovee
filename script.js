@@ -24,45 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
    1. LIVE ANNIVERSARY COUNTER
    ========================================================================== */
 function initAnniversaryCounter() {
-    // Start date matching approximately 3000 days ago on May 21, 2026.
-    // March 4, 2018 is exactly 3000 days prior to May 21, 2026!
-    const anniversaryDate = new Date('2018-03-04T00:00:00');
-    
-    const dVal = document.getElementById('count-days');
-    const hVal = document.getElementById('count-hours');
-    const mVal = document.getElementById('count-minutes');
-    const sVal = document.getElementById('count-seconds');
-    
-    if (!dVal || !hVal || !mVal || !sVal) return;
-
-    function updateCounter() {
-        const now = new Date();
-        const difference = now.getTime() - anniversaryDate.getTime();
-        
-        if (difference < 0) {
-            // Fallback if system clock is set before 2018
-            dVal.textContent = '3000';
-            hVal.textContent = '00';
-            mVal.textContent = '00';
-            sVal.textContent = '00';
-            return;
-        }
-        
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((difference / (1000 * 60)) % 60);
-        const seconds = Math.floor((difference / 1000) % 60);
-        
-        // Pad with leading zeros
-        dVal.textContent = days.toString().padStart(4, '0');
-        hVal.textContent = hours.toString().padStart(2, '0');
-        mVal.textContent = minutes.toString().padStart(2, '0');
-        sVal.textContent = seconds.toString().padStart(2, '0');
-    }
-    
-    // Run immediately and then every second
-    updateCounter();
-    setInterval(updateCounter, 1000);
+    // Counter now displays ∞ (infinity) symbols statically in the HTML.
+    // No dynamic counting needed — love is infinite! ❤️
 }
 
 /* ==========================================================================
