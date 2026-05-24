@@ -3,7 +3,7 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // Initialize components
     initAnniversaryCounter();
     initParticleCanvas();
@@ -13,7 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initLofiPlayer();
     initDriftingEasterEggs();
     initScrollSparkles();
-    
+    initConfetti();
+    initPolaroidCarousel();
+
     // Handle Window Resize for responsive features
     window.addEventListener('resize', () => {
         adjustEnvelopeSize();
@@ -617,4 +619,211 @@ function initScrollSparkles() {
             sparkle.remove();
         }, 900);
     }
+}
+
+/* ==========================================================================
+   CONFETTI BURST — Birthday celebration on page load
+   ========================================================================== */
+function initConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    window.addEventListener('resize', () => {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    const colors = ['#ff6ec7','#c77dff','#ffb347','#ff9fd2','#ffe066','#a8edea','#ffd6ec'];
+    const TOTAL   = 120;
+    let pieces    = [];
+    let running   = true;
+
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+    function createPiece() {
+        return {
+            x:   randomBetween(0, canvas.width),
+            y:   randomBetween(-20, -canvas.height * 0.3),
+            r:   randomBetween(5, 10),
+            d:   randomBetween(2, 5),
+            color: colors[Math.floor(Math.random() * colors.length)],
+            tilt: randomBetween(-10, 10),
+            tiltAngle: 0,
+            tiltSpeed: randomBetween(0.04, 0.12),
+            opacity: 1,
+            shape: Math.random() > 0.5 ? 'rect' : 'circle'
+        };
+    }
+
+    for (let i = 0; i < TOTAL; i++) {
+        pieces.push(createPiece());
+    }
+
+    let frame = 0;
+    function draw() {
+        if (!running) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        frame++;
+
+        pieces.forEach(p => {
+            p.tiltAngle += p.tiltSpeed;
+            p.y  += p.d;
+            p.tilt = Math.sin(p.tiltAngle) * 14;
+
+            // Fade out near bottom
+            if (p.y > canvas.height * 0.85) {
+                p.opacity = Math.max(0, p.opacity - 0.015);
+            }
+
+            ctx.save();
+            ctx.globalAlpha = p.opacity;
+            ctx.fillStyle   = p.color;
+            ctx.translate(p.x + p.r, p.y + p.r);
+            ctx.rotate((Math.PI / 180) * p.tilt);
+
+            if (p.shape === 'rect') {
+                ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+            } else {
+                ctx.beginPath();
+                ctx.arc(0, 0, p.r / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+
+            // Reset piece when off-screen or fully faded
+            if (p.y > canvas.height || p.opacity <= 0) {
+                if (frame < 300) {
+                    Object.assign(p, createPiece());
+                } else {
+                    p.opacity = 0; // leave it dead
+                }
+            }
+        });
+
+        // Stop after ~10 seconds
+        if (frame > 500) {
+            running = false;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            return;
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    // Delay slightly so page renders first
+    setTimeout(() => draw(), 300);
+}
+
+/* ==========================================================================
+   POLAROID CAROUSEL — Photos section
+   ========================================================================== */
+function initPolaroidCarousel() {
+    const track    = document.getElementById('polaroid-track');
+    const dotsWrap = document.getElementById('carousel-dots');
+    const filmstrip= document.getElementById('filmstrip');
+    const prevBtn  = document.getElementById('carousel-prev');
+    const nextBtn  = document.getElementById('carousel-next');
+
+    if (!track) return;
+
+    const slides = Array.from(track.querySelectorAll('.polaroid-slide'));
+    const total  = slides.length;
+    let current  = 0;
+    let isAnimating = false;
+
+    // Build dots
+    slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to photo ${i + 1}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(dot);
+    });
+
+    // Build filmstrip thumbnails
+    slides.forEach((slide, i) => {
+        const img = slide.querySelector('img');
+        if (!img) return;
+        const thumb = document.createElement('div');
+        thumb.className = 'film-thumb' + (i === 0 ? ' active' : '');
+        const tImg = document.createElement('img');
+        tImg.src = img.src;
+        tImg.alt = img.alt;
+        thumb.appendChild(tImg);
+        thumb.addEventListener('click', () => goTo(i));
+        filmstrip.appendChild(thumb);
+    });
+
+    function updateUI() {
+        const dots   = dotsWrap.querySelectorAll('.carousel-dot');
+        const thumbs = filmstrip.querySelectorAll('.film-thumb');
+        dots.forEach((d, i)   => d.classList.toggle('active', i === current));
+        thumbs.forEach((t, i) => t.classList.toggle('active', i === current));
+
+        // Scroll active thumbnail into view
+        const activeThumb = thumbs[current];
+        if (activeThumb) {
+            activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }
+
+    function goTo(index, direction) {
+        if (isAnimating || index === current) return;
+        isAnimating = true;
+
+        const dir   = direction !== undefined ? direction : (index > current ? 'next' : 'prev');
+        const prev  = slides[current];
+        const next  = slides[index];
+
+        prev.classList.remove('active');
+        prev.classList.add(dir === 'next' ? 'exit-left' : 'exit-right');
+
+        next.classList.add('active');
+        current = index;
+        updateUI();
+
+        setTimeout(() => {
+            prev.classList.remove('exit-left', 'exit-right');
+            isAnimating = false;
+        }, 560);
+    }
+
+    prevBtn.addEventListener('click', () => {
+        const idx = (current - 1 + total) % total;
+        goTo(idx, 'prev');
+    });
+
+    nextBtn.addEventListener('click', () => {
+        const idx = (current + 1) % total;
+        goTo(idx, 'next');
+    });
+
+    // Swipe/touch support
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend',   e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) {
+            if (diff > 0) goTo((current + 1) % total, 'next');
+            else          goTo((current - 1 + total) % total, 'prev');
+        }
+    });
+
+    // Arrow key support
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') goTo((current + 1) % total, 'next');
+        if (e.key === 'ArrowLeft')  goTo((current - 1 + total) % total, 'prev');
+    });
+
+    // Auto-advance every 5s
+    let autoTimer = setInterval(() => goTo((current + 1) % total, 'next'), 5000);
+    track.addEventListener('mouseenter', () => clearInterval(autoTimer));
+    track.addEventListener('mouseleave', () => {
+        autoTimer = setInterval(() => goTo((current + 1) % total, 'next'), 5000);
+    });
+
+    updateUI();
 }

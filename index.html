@@ -3,28 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Endlessly Loving You ❤️</title>
-    
-    <!-- Meta tags for romantic touch and SEO/testing -->
-    <meta name="description" content="A dreamy tribute for the one who holds my heart. I miss you and I love you endlessly.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+    <title>Happy Birthday, My Love ❤️</title>
+    <meta name="description" content="A dreamy birthday tribute for the one who holds my heart. I love you endlessly.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎂</text></svg>">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- CSS stylesheet -->
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Starry & Heart Canvas Background -->
+
+    <!-- Particle Canvas (hearts + stars) -->
     <canvas id="particles-canvas"></canvas>
-    
-    <!-- Overlay for subtle vignette/glowing grid -->
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
     <div class="ambient-glow"></div>
 
-    <!-- Floating Top Music Bar (Sticky / Minimalist) -->
+    <!-- Floating balloons -->
+    <div class="balloons-container" aria-hidden="true">
+        <div class="balloon b1">🎈</div>
+        <div class="balloon b2">🎀</div>
+        <div class="balloon b3">🎈</div>
+        <div class="balloon b4">💜</div>
+        <div class="balloon b5">🎈</div>
+        <div class="balloon b6">🎀</div>
+    </div>
+
+    <!-- Sticky Header -->
     <div class="floating-header">
         <div class="logo">For My Favorite Person <span class="pulse-sparkle">✨</span></div>
         <a href="#music-section" class="mini-player-indicator" id="mini-player-trigger">
@@ -35,28 +44,32 @@
         </a>
     </div>
 
-    <!-- MAIN APP WRAPPER -->
     <main>
-        
-        <!-- HERO SECTION -->
+
+        <!-- ══════════════════════════════════════════
+             HERO SECTION — Birthday Edition
+        ══════════════════════════════════════════ -->
         <section id="hero" class="hero-section">
             <div class="hero-content">
+
+                <!-- Birthday badge -->
+                <div class="bday-badge animate-fade-in">🎂 Happy Birthday My Love 🎂</div>
+
                 <div class="heart-container animate-fade-in">
-                    <!-- Beating Heart SVG -->
                     <svg class="beating-heart" viewBox="0 0 32 32">
                         <path d="M16 28.5C16 28.5 2 20.5 2 11.5C2 6.5 6 2.5 11 2.5C14 2.5 15.5 4.5 16 5.5C16.5 4.5 18 2.5 21 2.5C26 2.5 30 6.5 30 11.5C30 20.5 16 28.5 16 28.5Z"/>
                     </svg>
                 </div>
-                
+
                 <h1 class="hero-title animate-slide-up">
                     Every little thing reminds me of you <span class="heart-icon-text">❤️</span>
                 </h1>
-                
+
                 <p class="hero-subtitle animate-slide-up delay-1">
                     Distance only makes me realize how deeply I love and miss you.
                 </p>
-                
-                <!-- Live Counter Card -->
+
+                <!-- Infinity Counter -->
                 <div class="counter-card glass-panel animate-slide-up delay-2" id="counter-card">
                     <p class="counter-label">Loving you for</p>
                     <div class="counter-numbers">
@@ -79,7 +92,7 @@
                     </div>
                     <p class="counter-infinite">...and counting endlessly ❤️</p>
                 </div>
-                
+
                 <a href="#adore-section" class="scroll-arrow" aria-label="Scroll down">
                     <span class="arrow-dot"></span>
                     <svg viewBox="0 0 24 24" width="24" height="24">
@@ -89,13 +102,44 @@
             </div>
         </section>
 
-        <!-- SECTION 1: Reasons I Adore You -->
+        <!-- ══════════════════════════════════════════
+             BIRTHDAY WISH SECTION
+        ══════════════════════════════════════════ -->
+        <section id="birthday-section" class="section birthday-section">
+            <div class="bday-container glass-panel reveal-effect">
+                <div class="cake-wrapper">
+                    <div class="cake">
+                        <div class="cake-top">
+                            <div class="candle"><div class="flame"></div></div>
+                            <div class="candle"><div class="flame"></div></div>
+                            <div class="candle"><div class="flame"></div></div>
+                        </div>
+                        <div class="cake-layer layer-1">
+                            <div class="cake-deco">🌸 ✨ 🌸</div>
+                        </div>
+                        <div class="cake-layer layer-2"></div>
+                        <div class="cake-base"></div>
+                    </div>
+                </div>
+                <h2 class="bday-wish-title">Happy Birthday, Aayuu 🎉</h2>
+                <p class="bday-wish-text">
+                    Today the universe gets to celebrate the day <em>you</em> were born —<br>
+                    and I'm forever grateful you exist in my world. 🌸<br><br>
+                    May this year bring you everything you've ever dreamed of,<br>
+                    and may every single day of it feel as beautiful as <em>you</em>.
+                </p>
+                <div class="bday-stars">✨ 🌟 ⭐ 🌟 ✨</div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════
+             SECTION 1: Reasons I Adore You
+        ══════════════════════════════════════════ -->
         <section id="adore-section" class="section adore-section">
             <h2 class="section-title reveal-effect">Reasons I Adore You</h2>
             <p class="section-subtitle reveal-effect">Just a few of the infinite things that make me fall for you every single day...</p>
-            
+
             <div class="cards-grid">
-                <!-- Card 1 -->
                 <div class="adore-card glass-panel reveal-effect">
                     <div class="card-icon smile-icon">
                         <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -110,12 +154,9 @@
                     <span class="sparkle-decor">✨</span>
                 </div>
 
-                <!-- Card 2 -->
                 <div class="adore-card glass-panel reveal-effect">
                     <div class="card-icon peace-icon">
                         <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 10H11v-4h2v4zm0 4H11v-2h2v2z" style="display:none;"/>
-                            <!-- custom peace/cloud svg path -->
                             <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.42 0-.83.07-1.22.2A6 6 0 0 0 3.5 14c0 2.76 2.24 5 5 5h9z"/>
                         </svg>
                     </div>
@@ -124,7 +165,6 @@
                     <span class="sparkle-decor">✨</span>
                 </div>
 
-                <!-- Card 3 -->
                 <div class="adore-card glass-panel reveal-effect">
                     <div class="card-icon silence-icon">
                         <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
@@ -138,19 +178,18 @@
             </div>
         </section>
 
-        <!-- SECTION 2: Things I Miss -->
+        <!-- ══════════════════════════════════════════
+             SECTION 2: Things I Miss
+        ══════════════════════════════════════════ -->
         <section id="miss-section" class="section miss-section">
             <h2 class="section-title reveal-effect">Things I Miss</h2>
             <p class="section-subtitle reveal-effect">Every moment away from you is a moment spent wishing you were right next to me...</p>
-            
+
             <div class="timeline-container">
                 <div class="timeline-line"></div>
-                
-                <!-- Timeline Item 1 -->
+
                 <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot">
-                        <span class="dot-inner"></span>
-                    </div>
+                    <div class="timeline-dot"><span class="dot-inner"></span></div>
                     <div class="timeline-content glass-panel">
                         <div class="timeline-icon">🌸</div>
                         <h3>Your Laugh</h3>
@@ -158,11 +197,8 @@
                     </div>
                 </div>
 
-                <!-- Timeline Item 2 -->
                 <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot">
-                        <span class="dot-inner"></span>
-                    </div>
+                    <div class="timeline-dot"><span class="dot-inner"></span></div>
                     <div class="timeline-content glass-panel">
                         <div class="timeline-icon">📞</div>
                         <h3>Our Calls</h3>
@@ -170,11 +206,8 @@
                     </div>
                 </div>
 
-                <!-- Timeline Item 3 -->
                 <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot">
-                        <span class="dot-inner"></span>
-                    </div>
+                    <div class="timeline-dot"><span class="dot-inner"></span></div>
                     <div class="timeline-content glass-panel">
                         <div class="timeline-icon">💫</div>
                         <h3>Your Voice</h3>
@@ -182,11 +215,8 @@
                     </div>
                 </div>
 
-                <!-- Timeline Item 4 -->
                 <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot">
-                        <span class="dot-inner"></span>
-                    </div>
+                    <div class="timeline-dot"><span class="dot-inner"></span></div>
                     <div class="timeline-content glass-panel">
                         <div class="timeline-icon">🌙</div>
                         <h3>Your Sleepy Goodnight Texts</h3>
@@ -194,11 +224,8 @@
                     </div>
                 </div>
 
-                <!-- Timeline Item 5 -->
                 <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot">
-                        <span class="dot-inner"></span>
-                    </div>
+                    <div class="timeline-dot"><span class="dot-inner"></span></div>
                     <div class="timeline-content glass-panel">
                         <div class="timeline-icon">🤝</div>
                         <h3>Holding Your Hand</h3>
@@ -208,61 +235,127 @@
             </div>
         </section>
 
-        <!-- SECTION 3: Our Memories Photo Gallery -->
+        <!-- ══════════════════════════════════════════
+             SECTION 3: Our Memories — Polaroid Carousel
+        ══════════════════════════════════════════ -->
         <section id="memories-section" class="section memories-section">
             <h2 class="section-title reveal-effect">Our Memories 📸</h2>
-            <p class="section-subtitle reveal-effect">Every photo, a moment I hold close to my heart 💕</p>
+            <p class="section-subtitle reveal-effect">Every photo holds a moment I never want to forget 💕</p>
 
-            <div class="memories-grid reveal-effect">
-                <div class="memory-card memory-card--tall">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (1).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>💖</span></div>
+            <!-- Polaroid Carousel -->
+            <div class="polaroid-stage reveal-effect">
+                <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous photo">&#8592;</button>
+
+                <div class="polaroid-track" id="polaroid-track">
+
+                    <div class="polaroid-slide active">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (1).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">You make my world so beautiful 💖</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (2).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">Every moment with you is my favourite 🌸</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (3).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">I fall for you a little more every day ✨</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (4).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">Forever sounds like a good plan with you 💫</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (1).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">You are my favourite adventure 🌷</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (2).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">Lucky to have you in my life 💝</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (3).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">My heart is always yours 🥰</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (8).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">These are the moments I live for 💞</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (9).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">You are my forever person 🌹</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (5).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">Endlessly, infinitely yours ❤️</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (6).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">I miss you every single second 🫶</p>
+                        </div>
+                    </div>
+
+                    <div class="polaroid-slide">
+                        <div class="polaroid">
+                            <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (15).jpeg" alt="Our memory">
+                            <p class="polaroid-caption">You are everything to me 🌠</p>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="memory-card">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (2).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>🌸</span></div>
-                </div>
-                <div class="memory-card">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (3).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>✨</span></div>
-                </div>
-                <div class="memory-card memory-card--wide">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.56 (4).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>💫</span></div>
-                </div>
-                <div class="memory-card">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (1).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>🌷</span></div>
-                </div>
-                <div class="memory-card memory-card--tall">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (2).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>💝</span></div>
-                </div>
-                <div class="memory-card">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (3).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>🥰</span></div>
-                </div>
-                <div class="memory-card">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (8).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>💞</span></div>
-                </div>
-                <div class="memory-card memory-card--wide">
-                    <img src="photuu/WhatsApp Image 2026-05-18 at 23.47.57 (9).jpeg" alt="Our memory" loading="lazy">
-                    <div class="memory-overlay"><span>🌹</span></div>
-                </div>
+
+                <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next photo">&#8594;</button>
             </div>
+
+            <!-- Dot indicators -->
+            <div class="carousel-dots" id="carousel-dots"></div>
+
+            <!-- Film strip thumbnail row -->
+            <div class="filmstrip" id="filmstrip"></div>
         </section>
 
-        <!-- SECTION 4: A Little Letter For You -->
+        <!-- ══════════════════════════════════════════
+             SECTION 4: A Little Letter For You
+        ══════════════════════════════════════════ -->
         <section id="letter-section" class="section letter-section">
             <h2 class="section-title reveal-effect">A Little Letter For You</h2>
-            
+
             <div class="envelope-wrapper reveal-effect">
                 <div class="envelope" id="envelope">
                     <div class="envelope-flap"></div>
                     <div class="envelope-paper glass-panel">
                         <div class="letter-text" id="typewriter-letter">
-                            <!-- Typewriter text will go here dynamically -->
+                            <!-- Typewriter text injected by JS -->
                         </div>
                     </div>
                     <div class="envelope-base-overlay"></div>
@@ -271,18 +364,20 @@
             </div>
         </section>
 
-        <!-- SECTION 4: Cute Interactive Section -->
+        <!-- ══════════════════════════════════════════
+             SECTION 5: Cute Interactive
+        ══════════════════════════════════════════ -->
         <section id="interactive-section" class="section interactive-section">
             <div class="interactive-container glass-panel reveal-effect" id="hug-box">
                 <h2 class="interactive-title">Are you missing me right now?</h2>
                 <p class="interactive-subtitle">If you are, tap the button below to send me a little virtual hug...</p>
-                
+
                 <button class="hug-button" id="hug-btn" aria-label="Tap when you miss me too">
                     <span class="btn-stars">✨</span>
                     <span class="btn-text">Tap when you miss me too</span>
                     <span class="btn-heart">❤️</span>
                 </button>
-                
+
                 <div class="hug-response" id="hug-response-msg">
                     <span class="hug-emoji">🫂</span>
                     <p class="hug-text">Come here, let me hug you</p>
@@ -291,14 +386,15 @@
             </div>
         </section>
 
-        <!-- SECTION 5: Music Section -->
+        <!-- ══════════════════════════════════════════
+             SECTION 6: Music Player
+        ══════════════════════════════════════════ -->
         <section id="music-section" class="section music-section">
             <div class="music-container glass-panel reveal-effect">
                 <h2 class="music-title">Our Soundtrack 🎵</h2>
                 <p class="music-subtitle">A little melody for you to listen to while you read this...</p>
-                
+
                 <div class="player-wrapper">
-                    <!-- Spinning CD Artwork -->
                     <div class="vinyl-container">
                         <div class="vinyl" id="vinyl-disc">
                             <div class="vinyl-center"></div>
@@ -307,15 +403,13 @@
                         <div class="music-note-float float-2">♫</div>
                         <div class="music-note-float float-3">♬</div>
                     </div>
-                    
-                    <!-- Player Controls -->
+
                     <div class="player-controls">
                         <div class="track-details">
                             <h3 class="track-name" id="track-name">Love Story</h3>
                             <p class="track-artist">Taylor Swift</p>
                         </div>
-                        
-                        <!-- Progress Bar -->
+
                         <div class="progress-container" id="progress-container">
                             <div class="progress-bar" id="progress-bar"></div>
                             <div class="progress-dot"></div>
@@ -324,13 +418,11 @@
                             <span id="current-time">0:00</span>
                             <span id="duration-time">2:30</span>
                         </div>
-                        
-                        <!-- Buttons -->
+
                         <div class="control-buttons">
                             <button class="player-btn btn-prev" aria-label="Previous Track" disabled>
                                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="currentColor">
-                                    <polygon points="19 20 9 12 19 4 19 20"/>
-                                    <line x1="5" y1="4" x2="5" y2="20"/>
+                                    <polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="4" x2="5" y2="20"/>
                                 </svg>
                             </button>
                             <button class="player-btn btn-play" id="play-pause-btn" aria-label="Play or Pause">
@@ -338,19 +430,16 @@
                                     <polygon points="5 3 19 12 5 21 5 3"/>
                                 </svg>
                                 <svg id="pause-icon" class="hidden" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="currentColor">
-                                    <rect x="6" y="4" width="4" height="16"/>
-                                    <rect x="14" y="4" width="4" height="16"/>
+                                    <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
                                 </svg>
                             </button>
                             <button class="player-btn btn-next" aria-label="Next Track" disabled>
                                 <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="currentColor">
-                                    <polygon points="5 4 15 12 5 20 5 4"/>
-                                    <line x1="19" y1="4" x2="19" y2="20"/>
+                                    <polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="4" x2="19" y2="20"/>
                                 </svg>
                             </button>
                         </div>
 
-                        <!-- Volume Controls -->
                         <div class="volume-container">
                             <span class="volume-icon">🔈</span>
                             <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="70">
@@ -358,9 +447,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Audio Source -->
-                <!-- Place love-story.mp3 in the same folder as index.html -->
+
                 <audio id="bg-music" loop src="love-story.mp3"></audio>
             </div>
         </section>
@@ -375,7 +462,6 @@
         </div>
     </footer>
 
-    <!-- JS Scripts -->
     <script src="script.js"></script>
 </body>
 </html>

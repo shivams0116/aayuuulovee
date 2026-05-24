@@ -1710,3 +1710,423 @@ body.scrolled-light .drifting-text {
         gap: 10px;
     }
 }
+
+/* ==========================================================================
+   CONFETTI CANVAS
+   ========================================================================== */
+#confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* ==========================================================================
+   FLOATING BALLOONS
+   ========================================================================== */
+.balloons-container {
+    position: fixed;
+    bottom: -80px;
+    left: 0; right: 0;
+    pointer-events: none;
+    z-index: 1;
+    display: flex;
+    justify-content: space-around;
+}
+
+.balloon {
+    font-size: 2.4rem;
+    animation: floatUp 10s ease-in-out infinite;
+    opacity: 0;
+    filter: drop-shadow(0 4px 12px rgba(255,150,200,0.4));
+}
+
+.balloon.b1 { animation-delay: 0s;    animation-duration: 12s; }
+.balloon.b2 { animation-delay: 2s;    animation-duration: 9s;  }
+.balloon.b3 { animation-delay: 4s;    animation-duration: 14s; }
+.balloon.b4 { animation-delay: 1.5s;  animation-duration: 11s; }
+.balloon.b5 { animation-delay: 3.5s;  animation-duration: 10s; }
+.balloon.b6 { animation-delay: 5s;    animation-duration: 13s; }
+
+@keyframes floatUp {
+    0%   { transform: translateY(0) rotate(-5deg);   opacity: 0; }
+    10%  { opacity: 0.9; }
+    80%  { opacity: 0.8; }
+    100% { transform: translateY(-110vh) rotate(5deg); opacity: 0; }
+}
+
+/* ==========================================================================
+   BIRTHDAY BADGE (hero)
+   ========================================================================== */
+.bday-badge {
+    display: inline-block;
+    padding: 0.45rem 1.4rem;
+    background: linear-gradient(135deg, #ffb347, #ff6ec7, #c77dff);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 4px 24px rgba(255, 110, 199, 0.45);
+    animation: badgePop 0.6s cubic-bezier(0.34,1.56,0.64,1) both, badgeShimmer 3s ease-in-out 1s infinite;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+@keyframes badgePop {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes badgeShimmer {
+    0%,100% { box-shadow: 0 4px 24px rgba(255,110,199,0.45); }
+    50%      { box-shadow: 0 4px 40px rgba(199,125,255,0.7); }
+}
+
+/* ==========================================================================
+   BIRTHDAY SECTION — Cake
+   ========================================================================== */
+.birthday-section {
+    padding: 5rem 2rem;
+}
+
+.bday-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3.5rem 3rem;
+    text-align: center;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,220,255,0.45);
+    box-shadow: 0 8px 48px rgba(199,125,255,0.2), 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+/* ---- CSS Cake ---- */
+.cake-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.cake {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.cake-top {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 4px;
+}
+
+.candle {
+    width: 12px;
+    height: 38px;
+    background: linear-gradient(180deg, #ffb6c1, #ff69b4);
+    border-radius: 4px 4px 2px 2px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.flame {
+    position: absolute;
+    top: -16px;
+    width: 10px;
+    height: 16px;
+    background: radial-gradient(ellipse at 50% 80%, #fff 0%, #ffe033 40%, #ff9900 80%, transparent 100%);
+    border-radius: 50% 50% 30% 30%;
+    animation: flicker 0.8s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 6px #ffb347);
+}
+
+@keyframes flicker {
+    0%   { transform: scaleX(1) scaleY(1)   rotate(-2deg); opacity: 1; }
+    100% { transform: scaleX(0.85) scaleY(1.1) rotate(2deg); opacity: 0.9; }
+}
+
+.cake-layer {
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.layer-1 {
+    width: 140px;
+    height: 48px;
+    background: linear-gradient(135deg, #ffb6d9, #d4a8ff);
+    border-top: 3px solid rgba(255,255,255,0.6);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.layer-2 {
+    width: 180px;
+    height: 52px;
+    background: linear-gradient(135deg, #ffd6ec, #e8c5ff);
+    border-top: 3px solid rgba(255,255,255,0.5);
+}
+
+.cake-base {
+    width: 200px;
+    height: 16px;
+    background: linear-gradient(135deg, #c77dff, #ff6ec7);
+    border-radius: 0 0 12px 12px;
+}
+
+.cake-deco {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.15em;
+}
+
+.bday-wish-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    background: linear-gradient(135deg, #ff6ec7, #c77dff, #ffb347);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.2rem;
+    line-height: 1.2;
+}
+
+.bday-wish-text {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--text-soft);
+    line-height: 1.9;
+    margin-bottom: 1.5rem;
+}
+
+.bday-wish-text em {
+    font-style: italic;
+    color: var(--pink-deep);
+}
+
+.bday-stars {
+    font-size: 1.4rem;
+    letter-spacing: 0.3em;
+    animation: starPulse 2s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.1); }
+}
+
+/* ==========================================================================
+   POLAROID CAROUSEL
+   ========================================================================== */
+.memories-section {
+    padding: 5rem 1rem 4rem;
+    overflow: hidden;
+}
+
+.polaroid-stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    min-height: 480px;
+}
+
+.polaroid-track {
+    width: 100%;
+    position: relative;
+    min-height: 460px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.polaroid-slide {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.88) rotate(2deg);
+    transition: opacity 0.55s cubic-bezier(0.4,0,0.2,1),
+                transform 0.55s cubic-bezier(0.34,1.2,0.64,1);
+}
+
+.polaroid-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1) rotate(0deg);
+    z-index: 2;
+}
+
+.polaroid-slide.exit-left {
+    opacity: 0;
+    transform: scale(0.9) translateX(-60px) rotate(-4deg);
+}
+
+.polaroid-slide.exit-right {
+    opacity: 0;
+    transform: scale(0.9) translateX(60px) rotate(4deg);
+}
+
+.polaroid {
+    background: #fff;
+    padding: 14px 14px 52px;
+    border-radius: 4px;
+    box-shadow:
+        0 8px 32px rgba(180, 80, 160, 0.22),
+        0 2px 8px rgba(0,0,0,0.12),
+        inset 0 0 0 1px rgba(0,0,0,0.04);
+    max-width: 380px;
+    width: 90vw;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.polaroid:hover {
+    transform: scale(1.03) rotate(-1deg);
+    box-shadow: 0 20px 60px rgba(199,125,255,0.35), 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.polaroid img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    border-radius: 2px;
+}
+
+.polaroid-caption {
+    position: absolute;
+    bottom: 10px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--font-handwriting, 'Caveat', cursive);
+    font-size: 1.1rem;
+    color: #555;
+    padding: 0 12px;
+    line-height: 1.3;
+}
+
+/* Carousel buttons */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    color: #b06ec7;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(180,80,160,0.25);
+    transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+}
+
+.carousel-prev { left: 0; }
+.carousel-next { right: 0; }
+
+.carousel-btn:hover {
+    background: linear-gradient(135deg, #ff9fd2, #c77dff);
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 28px rgba(199,125,255,0.45);
+}
+
+/* Dot indicators */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 2rem;
+}
+
+.carousel-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(199,125,255,0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.carousel-dot.active {
+    background: linear-gradient(135deg, #ff6ec7, #c77dff);
+    transform: scale(1.3);
+    width: 22px;
+    border-radius: 4px;
+}
+
+/* Film strip thumbnail row */
+.filmstrip {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0.5rem 1rem 1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.filmstrip::-webkit-scrollbar { display: none; }
+
+.film-thumb {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    opacity: 0.55;
+}
+
+.film-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+.film-thumb.active,
+.film-thumb:hover {
+    border-color: #c77dff;
+    opacity: 1;
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(199,125,255,0.4);
+}
+
+/* ==========================================================================
+   RESPONSIVE — Birthday + Carousel
+   ========================================================================== */
+@media (max-width: 768px) {
+    .bday-container { padding: 2.5rem 1.5rem; }
+    .polaroid-stage { min-height: 380px; }
+    .polaroid { padding: 10px 10px 44px; }
+    .carousel-btn { width: 38px; height: 38px; font-size: 1.1rem; }
+    .balloons-container { display: none; } /* hide on small to avoid clutter */
+}
+
+@media (max-width: 480px) {
+    .polaroid-stage { min-height: 320px; }
+    .film-thumb { width: 50px; height: 50px; }
+    .bday-wish-title { font-size: 1.6rem; }
+}
