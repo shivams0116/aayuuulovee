@@ -2073,19 +2073,25 @@ body.scrolled-night .bday-wish-text {
 }
 
 .collage-wrapper {
-    column-count: 3;
-    column-gap: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
     width: 100%;
     margin-top: 2rem;
 }
 
+.collage-col {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 24px;
+    min-width: 0;
+}
+
 /* Cream-White Polaroid Card - Pinterest Style */
 .collage-cell {
-    display: inline-block;
+    display: block;
     width: 100%;
-    margin-bottom: 24px;
-    -webkit-column-break-inside: avoid;
-    break-inside: avoid-column;
     background: #ffffff; /* Pinterest card background */
     border: 1px solid rgba(0, 0, 0, 0.04);
     border-radius: 16px;
@@ -2285,11 +2291,12 @@ body.scrolled-night .bday-wish-text {
    ========================================================================== */
 @media (max-width: 900px) {
     .collage-wrapper {
-        column-count: 2;
-        column-gap: 16px;
+        gap: 16px;
+    }
+    .collage-col {
+        gap: 18px;
     }
     .collage-cell {
-        margin-bottom: 18px;
         padding: 10px 10px 14px 10px;
     }
     .lightbox-prev { left: 20px; }
@@ -2303,10 +2310,14 @@ body.scrolled-night .bday-wish-text {
 
 @media (max-width: 600px) {
     .collage-wrapper {
-        column-count: 1;
+        flex-direction: column;
         max-width: 360px;
         margin-left: auto;
         margin-right: auto;
+    }
+    .collage-col {
+        width: 100%;
+        flex: none;
     }
     .memories-section {
         padding: 4rem 1.5rem 3rem;
