@@ -212,7 +212,7 @@ function initScrollObserver() {
     
     const observerOptions = {
         root: null, // Viewport
-        threshold: 0.12, // Trigger when 12% is visible
+        threshold: 0.01, // Trigger when 1% is visible (ensures tall stacked containers on mobile trigger reveal)
         rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits screen bottom
     };
     
