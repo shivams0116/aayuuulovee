@@ -602,68 +602,121 @@ function toggleMusic(forcePlay = null) {
 }
 
 function initMiniPlayer() {
-    const miniPlayer = document.getElementById('mini-music-player');
-    const playBtn = document.getElementById('mini-play-btn');
-    const playIcon = document.getElementById('mini-play-icon');
-    const pauseIcon = document.getElementById('mini-pause-icon');
-    const vinyl = document.getElementById('mini-vinyl');
-    const volumeSlider = document.getElementById('mini-volume');
-    const miniTrigger = document.getElementById('mini-player-trigger');
-    const audio = document.getElementById('bg-music');
-    
+    const miniPlayer    = document.getElementById('mini-music-player');
+    const playBtn       = document.getElementById('mini-play-btn');
+    const playIcon      = document.getElementById('mini-play-icon');
+    const pauseIcon     = document.getElementById('mini-pause-icon');
+    const vinyl         = document.getElementById('mini-vinyl');
+    const volumeSlider  = document.getElementById('mini-volume');
+    const trackNameEl   = document.getElementById('mini-track-name');
+
     if (!miniPlayer || !playBtn || !vinyl) return;
-    
-    if (audio) {
-        audio.addEventListener('error', () => {
-            console.warn("Audio tag error occurred. Activating Web Audio synthesizer fallback.");
-            useSynthFallback = true;
-            if (isMusicPlaying()) {
-                startSynthMelody();
+
+    // Update track name label
+    if (trackNameEl) trackNameEl.textContent = 'Love Story';
+
+    // ── YouTube IFrame API ─────────────────────────────────────────────────
+    // Love Story – Taylor Swift  (YouTube video ID)
+    const YT_VIDEO_ID = 'S2kB6k-kPKI';
+    let ytPlayer = null;
+    let ytReady  = false;
+    let isPlaying = false;
+
+    // Hidden container for the YouTube iframe
+    const ytContainer = document.createElement('div');
+    ytContainer.id = 'yt-player-container';
+    ytContainer.style.cssText = 'position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;pointer-events:none;opacity:0;';
+    document.body.appendChild(ytContainer);
+
+    // Load YouTube IFrame API script once
+    function loadYTApi() {
+        if (document.getElementById('yt-api-script')) return;
+        const tag = document.createElement('script');
+        tag.id  = 'yt-api-script';
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+    }
+
+    // Called by YouTube API when ready
+    window.onYouTubeIframeAPIReady = function () {
+        ytPlayer = new YT.Player('yt-player-container', {
+            height: '1',
+            width:  '1',
+            videoId: YT_VIDEO_ID,
+            playerVars: {
+                autoplay: 0,
+                controls: 0,
+                rel:      0,
+                showinfo: 0,
+                modestbranding: 1,
+                playsinline: 1
+            },
+            events: {
+                onReady: (e) => {
+                    ytReady = true;
+                    e.target.setVolume(volumeSlider ? parseInt(volumeSlider.value) : 70);
+                },
+                onStateChange: (e) => {
+                    // YT.PlayerState.PLAYING = 1
+                    if (e.data === 1) {
+                        isPlaying = true;
+                        updateUI(true);
+                    } else if (e.data === 2 || e.data === 0) {
+                        // PAUSED or ENDED
+                        isPlaying = false;
+                        updateUI(false);
+                    }
+                },
+                onError: () => {
+                    console.warn('YouTube player error — check network or video ID.');
+                }
             }
         });
-        audio.volume = volumeSlider.value / 100;
-    }
-    
-    function isMusicPlaying() {
-        return useSynthFallback ? isSynthPlaying : (audio ? !audio.paused : false);
-    }
-    
-    function updatePlayerUI(playing) {
+    };
+
+    loadYTApi();
+
+    // ── UI helpers ─────────────────────────────────────────────────────────
+    function updateUI(playing) {
         if (playing) {
             playIcon.classList.add('hidden');
             pauseIcon.classList.remove('hidden');
             vinyl.classList.add('playing');
-            if (miniTrigger) miniTrigger.classList.add('playing');
         } else {
             playIcon.classList.remove('hidden');
             pauseIcon.classList.add('hidden');
             vinyl.classList.remove('playing');
-            if (miniTrigger) miniTrigger.classList.remove('playing');
         }
     }
-    
-    playBtn.addEventListener('click', () => {
-        toggleMusic();
-    });
-    
-    if (miniTrigger) {
-        miniTrigger.addEventListener('click', () => {
-            toggleMusic();
+
+    function toggleMusic() {
+        if (!ytReady) {
+            // API not ready yet — show a brief hint
+            if (trackNameEl) {
+                trackNameEl.textContent = 'Loading...';
+                setTimeout(() => { trackNameEl.textContent = 'Love Story'; }, 1500);
+            }
+            return;
+        }
+        if (isPlaying) {
+            ytPlayer.pauseVideo();
+        } else {
+            ytPlayer.playVideo();
+        }
+    }
+
+    // ── Controls ───────────────────────────────────────────────────────────
+    playBtn.addEventListener('click', toggleMusic);
+
+    if (volumeSlider) {
+        volumeSlider.addEventListener('input', () => {
+            if (ytReady) ytPlayer.setVolume(parseInt(volumeSlider.value));
         });
     }
-    
-    volumeSlider.addEventListener('input', () => {
-        const vol = volumeSlider.value / 100;
-        if (audio) {
-            audio.volume = vol;
-        }
-        if (!audioCtx) initSynth();
-        if (synthVolumeNode) {
-            synthVolumeNode.gain.setValueAtTime(vol, audioCtx.currentTime);
-        }
-    });
-    
-    window.updateMiniPlayerUI = updatePlayerUI;
+
+    // Expose globally so welcome screen can trigger play after unlock
+    window.toggleMusic = toggleMusic;
+    window.updateMiniPlayerUI = updateUI;
 }
 
 /* ==========================================================================
