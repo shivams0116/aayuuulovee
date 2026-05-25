@@ -4,17 +4,28 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Initialize components
+    // Lock scroll initially for welcome screen
+    document.body.style.overflow = 'hidden';
+
+    // Initialize new personalized components
+    initWelcomeScreen();
+    initMiniPlayer();
+    initMeaningCards();
+    initRelationshipTimeline();
+    initBirthdaySurprise();
+    initEndingSection();
+    initCursorSparkles();
+
+    // Initialize existing components
     initAnniversaryCounter();
     initParticleCanvas();
     initScrollObserver();
     initEnvelope();
     initInteractiveHug();
-    initLofiPlayer();
     initDriftingEasterEggs();
     initScrollSparkles();
     initConfetti();
-    initPolaroidCarousel();
+    initLightbox();
 
     // Handle Window Resize for responsive features
     window.addEventListener('resize', () => {
@@ -428,144 +439,272 @@ function createHeartShower(event) {
 }
 
 /* ==========================================================================
-   6. LOFI MUSIC PLAYER CONTROLS
+   6. DYNAMIC WEB AUDIO API SYNTHESIZER & MINI PLAYER CONTROLS
    ========================================================================== */
-function initLofiPlayer() {
-    const audio = document.getElementById('bg-music');
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    const playIcon = document.getElementById('play-icon');
-    const pauseIcon = document.getElementById('pause-icon');
-    const vinyl = document.getElementById('vinyl-disc');
-    const progressContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('progress-bar');
-    const currentTimeDisplay = document.getElementById('current-time');
-    const durationTimeDisplay = document.getElementById('duration-time');
-    const volumeSlider = document.getElementById('volume-slider');
+let audioCtx = null;
+let synthIntervals = [];
+let isSynthPlaying = false;
+let synthVolumeNode = null;
+
+function initSynth() {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    audioCtx = new AudioContextClass();
     
-    const miniTrigger = document.getElementById('mini-player-trigger');
-    
-    if (!audio || !playPauseBtn || !vinyl) return;
-    
-    // Play/Pause Action
-    function togglePlay() {
-        if (audio.paused) {
-            audio.play()
-                .then(() => {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                    vinyl.classList.add('playing');
-                    miniTrigger.classList.add('playing');
-                })
-                .catch(err => {
-                    console.log("Audio play blocked by browser. Requires direct user tap.", err);
-                });
-        } else {
-            audio.pause();
-            playIcon.classList.remove('hidden');
-            pauseIcon.classList.add('hidden');
-            vinyl.classList.remove('playing');
-            miniTrigger.classList.remove('playing');
-        }
+    synthVolumeNode = audioCtx.createGain();
+    synthVolumeNode.gain.setValueAtTime(0.7, audioCtx.currentTime);
+    synthVolumeNode.connect(audioCtx.destination);
+}
+
+function startSynthMelody() {
+    if (!audioCtx) initSynth();
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
     }
     
-    playPauseBtn.addEventListener('click', togglePlay);
+    if (isSynthPlaying) return;
+    isSynthPlaying = true;
     
-    // Sync header mini indicator clicks to trigger music controls
-    miniTrigger.addEventListener('click', (e) => {
-        // Prevent scroll to music section if we just want to play/pause from header,
-        // or keep scroll behavior and just play. Let's do both: play & scroll
-        if (audio.paused) {
-            togglePlay();
+    // Warm romantic chord progression pads: Cmaj7 - Am7 - Fmaj7 - G6
+    const chords = [
+        [130.81, 164.81, 196.00, 246.94], // Cmaj7
+        [110.00, 130.81, 164.81, 196.00], // Am7
+        [87.31, 220.00, 261.63, 329.63],  // Fmaj7
+        [98.00, 246.94, 293.66, 329.63]   // G6
+    ];
+    
+    let currentChordIndex = 0;
+    const chordDuration = 6.0;
+    
+    function playPadChord(frequencies) {
+        if (!isSynthPlaying) return;
+        
+        const now = audioCtx.currentTime;
+        frequencies.forEach(freq => {
+            const osc = audioCtx.createOscillator();
+            const filter = audioCtx.createBiquadFilter();
+            const gainNode = audioCtx.createGain();
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(450, now);
+            
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.08 / frequencies.length, now + 2.0);
+            gainNode.gain.setValueAtTime(0.08 / frequencies.length, now + chordDuration - 1.5);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + chordDuration);
+            
+            osc.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(synthVolumeNode);
+            
+            osc.start(now);
+            osc.stop(now + chordDuration);
+        });
+    }
+    
+    function chordLoop() {
+        if (!isSynthPlaying) return;
+        playPadChord(chords[currentChordIndex]);
+        currentChordIndex = (currentChordIndex + 1) % chords.length;
+        
+        const padTimer = setTimeout(chordLoop, chordDuration * 1000 - 50);
+        synthIntervals.push(padTimer);
+    }
+    
+    chordLoop();
+    
+    // Sparkling chime box notes (Pentatonic major for guaranteed harmony)
+    const melodyNotes = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+    
+    function playChime() {
+        if (!isSynthPlaying) return;
+        const now = audioCtx.currentTime;
+        const note = melodyNotes[Math.floor(Math.random() * melodyNotes.length)];
+        
+        const osc = audioCtx.createOscillator();
+        const filter = audioCtx.createBiquadFilter();
+        const gainNode = audioCtx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note, now);
+        
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1200, now);
+        
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(0.12, now + 0.02);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 3.0);
+        
+        osc.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(synthVolumeNode);
+        
+        osc.start(now);
+        osc.stop(now + 3.2);
+        
+        const nextTime = Math.random() * 3000 + 2000;
+        const chimeTimer = setTimeout(playChime, nextTime);
+        synthIntervals.push(chimeTimer);
+    }
+    
+    const startChimeTimer = setTimeout(playChime, 1500);
+    synthIntervals.push(startChimeTimer);
+}
+
+function stopSynthMelody() {
+    isSynthPlaying = false;
+    synthIntervals.forEach(timer => clearTimeout(timer));
+    synthIntervals = [];
+}
+
+let useSynthFallback = false;
+
+function toggleMusic(forcePlay = null) {
+    const audio = document.getElementById('bg-music');
+    const isPlaying = useSynthFallback ? isSynthPlaying : (audio ? !audio.paused : false);
+    const shouldPlay = (forcePlay !== null) ? forcePlay : !isPlaying;
+    
+    if (shouldPlay) {
+        if (useSynthFallback) {
+            startSynthMelody();
+            if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
+        } else if (audio) {
+            audio.play()
+                .then(() => {
+                    if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
+                })
+                .catch(err => {
+                    console.warn("MP3 playback failed. Falling back to Web Audio synthesizer.", err);
+                    useSynthFallback = true;
+                    startSynthMelody();
+                    if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
+                });
+        } else {
+            useSynthFallback = true;
+            startSynthMelody();
+            if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
         }
-    });
-    
-    // Time & Progress Updates
-    audio.addEventListener('timeupdate', () => {
-        const current = audio.currentTime;
-        const duration = audio.duration || 150; // fallback duration if not loaded
-        
-        const pct = (current / duration) * 100;
-        progressBar.style.width = `${pct}%`;
-        
-        currentTimeDisplay.textContent = formatTime(current);
-        durationTimeDisplay.textContent = formatTime(duration);
-    });
-    
-    audio.addEventListener('loadedmetadata', () => {
-        durationTimeDisplay.textContent = formatTime(audio.duration);
-    });
-    
-    // Click progress bar to seek
-    progressContainer.addEventListener('click', (e) => {
-        const width = progressContainer.clientWidth;
-        const clickX = e.offsetX;
-        const duration = audio.duration || 150;
-        
-        audio.currentTime = (clickX / width) * duration;
-    });
-    
-    // Volume Control
-    volumeSlider.addEventListener('input', () => {
-        audio.volume = volumeSlider.value / 100;
-    });
-    
-    // Format Seconds to M:SS
-    function formatTime(seconds) {
-        if (isNaN(seconds)) return "0:00";
-        const m = Math.floor(seconds / 60);
-        const s = Math.floor(seconds % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
+    } else {
+        if (useSynthFallback) {
+            stopSynthMelody();
+        } else if (audio) {
+            audio.pause();
+        }
+        if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(false);
     }
 }
 
+function initMiniPlayer() {
+    const miniPlayer = document.getElementById('mini-music-player');
+    const playBtn = document.getElementById('mini-play-btn');
+    const playIcon = document.getElementById('mini-play-icon');
+    const pauseIcon = document.getElementById('mini-pause-icon');
+    const vinyl = document.getElementById('mini-vinyl');
+    const volumeSlider = document.getElementById('mini-volume');
+    const miniTrigger = document.getElementById('mini-player-trigger');
+    const audio = document.getElementById('bg-music');
+    
+    if (!miniPlayer || !playBtn || !vinyl) return;
+    
+    if (audio) {
+        audio.addEventListener('error', () => {
+            console.warn("Audio tag error occurred. Activating Web Audio synthesizer fallback.");
+            useSynthFallback = true;
+            if (isMusicPlaying()) {
+                startSynthMelody();
+            }
+        });
+        audio.volume = volumeSlider.value / 100;
+    }
+    
+    function isMusicPlaying() {
+        return useSynthFallback ? isSynthPlaying : (audio ? !audio.paused : false);
+    }
+    
+    function updatePlayerUI(playing) {
+        if (playing) {
+            playIcon.classList.add('hidden');
+            pauseIcon.classList.remove('hidden');
+            vinyl.classList.add('playing');
+            if (miniTrigger) miniTrigger.classList.add('playing');
+        } else {
+            playIcon.classList.remove('hidden');
+            pauseIcon.classList.add('hidden');
+            vinyl.classList.remove('playing');
+            if (miniTrigger) miniTrigger.classList.remove('playing');
+        }
+    }
+    
+    playBtn.addEventListener('click', () => {
+        toggleMusic();
+    });
+    
+    if (miniTrigger) {
+        miniTrigger.addEventListener('click', () => {
+            toggleMusic();
+        });
+    }
+    
+    volumeSlider.addEventListener('input', () => {
+        const vol = volumeSlider.value / 100;
+        if (audio) {
+            audio.volume = vol;
+        }
+        if (!audioCtx) initSynth();
+        if (synthVolumeNode) {
+            synthVolumeNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+        }
+    });
+    
+    window.updateMiniPlayerUI = updatePlayerUI;
+}
+
 /* ==========================================================================
-   7. EASTER EGGS - RANDOM DRIFTING MESSAGES
+   7. EASTER EGGS - RANDOM DRIFTING MESSAGES (WHISPERS)
    ========================================================================== */
 function initDriftingEasterEggs() {
     const messages = [
-        "I miss you... ❤️",
-        "Thinking of you... ✨",
-        "Wish you were here 🫂",
-        "You are my favorite person 🌸",
-        "Sending a big hug... 💫",
-        "I love you endlessly...",
-        "My heart belongs to you 💖",
-        "Counting down the hours 🌙"
+        "pretty girl ❤️",
+        "my safe place 🫂",
+        "I miss you... ✨",
+        "so lucky to have you 💖",
+        "happy birthday love 🌸",
+        "my favorite thought 💫",
+        "loving you endlessly 🌙",
+        "thank you for existing ❤️"
     ];
     
     function spawnDriftingText() {
-        // Prevent massive queues if page sits idle
         const existing = document.querySelectorAll('.drifting-text');
-        if (existing.length >= 3) return;
+        if (existing.length >= 4) return;
         
         const text = document.createElement('div');
         text.className = 'drifting-text';
         text.textContent = messages[Math.floor(Math.random() * messages.length)];
         
-        // Random horizontal position (keep 10% safety margin away from edges)
         const leftPercent = Math.random() * 70 + 15;
         text.style.left = `${leftPercent}%`;
         
-        // Randomize sway amount and animation speed
-        const driftX = Math.random() * 100 - 50; // sway -50px to 50px
+        const driftX = Math.random() * 120 - 60;
         text.style.setProperty('--drift-x', `${driftX}px`);
         
-        const duration = Math.random() * 4 + 7; // 7s to 11s duration
+        const duration = Math.random() * 5 + 9; // Slower, softer drift (9s to 14s)
         text.style.animationDuration = `${duration}s`;
         
         document.body.appendChild(text);
         
-        // Garbage collect
         setTimeout(() => {
             text.remove();
         }, duration * 1000 + 200);
     }
     
-    // Trigger first text drift after 8 seconds, then periodically
     setTimeout(() => {
         spawnDriftingText();
-        setInterval(spawnDriftingText, 14000); // Spawn every 14 seconds
-    }, 6000);
+        setInterval(spawnDriftingText, 10000); // Spawn every 10 seconds
+    }, 5000);
 }
 
 /* ==========================================================================
@@ -718,106 +857,303 @@ function initConfetti() {
 }
 
 /* ==========================================================================
-   POLAROID CAROUSEL — Photos section
+   PHOTO LIGHTBOX / FULL-SCREEN VIEW (WITH TRANSITIONS)
    ========================================================================== */
-function initPolaroidCarousel() {
-    const track    = document.getElementById('polaroid-track');
-    const dotsWrap = document.getElementById('carousel-dots');
-    const filmstrip= document.getElementById('filmstrip');
-    const prevBtn  = document.getElementById('carousel-prev');
-    const nextBtn  = document.getElementById('carousel-next');
-
-    if (!track) return;
-
-    const slides = Array.from(track.querySelectorAll('.polaroid-slide'));
-    const total  = slides.length;
-    let current  = 0;
-    let isAnimating = false;
-
-    // Build dots
-    slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', `Go to photo ${i + 1}`);
-        dot.addEventListener('click', () => goTo(i));
-        dotsWrap.appendChild(dot);
-    });
-
-    // Build filmstrip thumbnails
-    slides.forEach((slide, i) => {
-        const img = slide.querySelector('img');
-        if (!img) return;
-        const thumb = document.createElement('div');
-        thumb.className = 'film-thumb' + (i === 0 ? ' active' : '');
-        const tImg = document.createElement('img');
-        tImg.src = img.src;
-        tImg.alt = img.alt;
-        thumb.appendChild(tImg);
-        thumb.addEventListener('click', () => goTo(i));
-        filmstrip.appendChild(thumb);
-    });
-
-    function updateUI() {
-        const dots   = dotsWrap.querySelectorAll('.carousel-dot');
-        const thumbs = filmstrip.querySelectorAll('.film-thumb');
-        dots.forEach((d, i)   => d.classList.toggle('active', i === current));
-        thumbs.forEach((t, i) => t.classList.toggle('active', i === current));
-
-        // Scroll active thumbnail into view
-        const activeThumb = thumbs[current];
-        if (activeThumb) {
-            activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+function initLightbox() {
+    const lightbox = document.getElementById('photo-lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const closeBtn = document.querySelector('.lightbox-close');
+    const prevBtn = document.querySelector('.lightbox-prev');
+    const nextBtn = document.querySelector('.lightbox-next');
+    
+    if (!lightbox) return;
+    
+    // Inject inline transitions for smooth cross-fading
+    lightboxImg.style.transition = 'opacity 0.25s ease';
+    lightboxCaption.style.transition = 'opacity 0.25s ease';
+    
+    const cells = Array.from(document.querySelectorAll('.collage-cell'));
+    let currentIndex = 0;
+    
+    function showImage(index) {
+        if (index < 0 || index >= cells.length) return;
+        currentIndex = index;
+        const cell = cells[index];
+        const img = cell.querySelector('img');
+        const caption = cell.querySelector('.collage-caption');
+        
+        if (lightbox.classList.contains('active')) {
+            // Smooth transition for changing images
+            lightboxImg.style.opacity = '0';
+            lightboxCaption.style.opacity = '0';
+            
+            setTimeout(() => {
+                lightboxImg.src = img.src;
+                lightboxCaption.textContent = caption.textContent;
+                lightboxImg.style.opacity = '1';
+                lightboxCaption.style.opacity = '1';
+            }, 250);
+        } else {
+            lightboxImg.src = img.src;
+            lightboxCaption.textContent = caption.textContent;
+            lightboxImg.style.opacity = '1';
+            lightboxCaption.style.opacity = '1';
+            lightbox.classList.add('active');
+        }
+        
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        // Retain scroll lock if welcome overlay is still active
+        const welcome = document.getElementById('welcome-overlay');
+        if (!welcome || welcome.classList.contains('fade-out')) {
+            document.body.style.overflow = '';
         }
     }
-
-    function goTo(index, direction) {
-        if (isAnimating || index === current) return;
-        isAnimating = true;
-
-        // Hide current slide
-        slides[current].classList.remove('active');
-
-        // Show next slide
-        current = index;
-        slides[current].classList.add('active');
-        updateUI();
-
-        setTimeout(() => { isAnimating = false; }, 500);
-    }
-
-    prevBtn.addEventListener('click', () => {
-        const idx = (current - 1 + total) % total;
-        goTo(idx, 'prev');
+    
+    cells.forEach((cell, idx) => {
+        cell.addEventListener('click', () => {
+            showImage(idx);
+        });
     });
-
-    nextBtn.addEventListener('click', () => {
-        const idx = (current + 1) % total;
-        goTo(idx, 'next');
-    });
-
-    // Swipe/touch support
-    let touchStartX = 0;
-    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend',   e => {
-        const diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 40) {
-            if (diff > 0) goTo((current + 1) % total, 'next');
-            else          goTo((current - 1 + total) % total, 'prev');
+    
+    closeBtn.addEventListener('click', closeLightbox);
+    
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
         }
     });
-
-    // Arrow key support
-    document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowRight') goTo((current + 1) % total, 'next');
-        if (e.key === 'ArrowLeft')  goTo((current - 1 + total) % total, 'prev');
+    
+    prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        let prevIdx = currentIndex - 1;
+        if (prevIdx < 0) prevIdx = cells.length - 1;
+        showImage(prevIdx);
     });
-
-    // Auto-advance every 5s
-    let autoTimer = setInterval(() => goTo((current + 1) % total, 'next'), 5000);
-    track.addEventListener('mouseenter', () => clearInterval(autoTimer));
-    track.addEventListener('mouseleave', () => {
-        autoTimer = setInterval(() => goTo((current + 1) % total, 'next'), 5000);
+    
+    nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        let nextIdx = currentIndex + 1;
+        if (nextIdx >= cells.length) nextIdx = 0;
+        showImage(nextIdx);
     });
+    
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') {
+            let prevIdx = currentIndex - 1;
+            if (prevIdx < 0) prevIdx = cells.length - 1;
+            showImage(prevIdx);
+        }
+        if (e.key === 'ArrowRight') {
+            let nextIdx = currentIndex + 1;
+            if (nextIdx >= cells.length) nextIdx = 0;
+            showImage(nextIdx);
+        }
+    });
+}
 
-    updateUI();
+/* ==========================================================================
+   NEW EXCLUSIVE COMPONENTS & INTERACTION SCRIPTS
+   ========================================================================== */
+
+// 1. Welcome Screen
+function initWelcomeScreen() {
+    const welcomeOverlay = document.getElementById('welcome-overlay');
+    const welcomeLoader = document.getElementById('welcome-loader');
+    const welcomeReveal = document.getElementById('welcome-reveal');
+    const enterBtn = document.getElementById('enter-btn');
+    const soundCheckbox = document.getElementById('welcome-sound-checkbox');
+    const miniPlayer = document.getElementById('mini-music-player');
+    
+    if (!welcomeOverlay || !welcomeLoader || !welcomeReveal || !enterBtn) return;
+    
+    // Initially hide mini player during welcome
+    if (miniPlayer) miniPlayer.classList.add('hidden-player');
+    
+    setTimeout(() => {
+        welcomeLoader.style.opacity = '0';
+        setTimeout(() => {
+            welcomeLoader.classList.add('hidden');
+            welcomeReveal.classList.remove('hidden');
+        }, 500);
+    }, 2500);
+    
+    enterBtn.addEventListener('click', () => {
+        // Start melody if sound enabled
+        if (soundCheckbox.checked) {
+            toggleMusic(true);
+        }
+        
+        // Fade out welcome screen
+        welcomeOverlay.classList.add('fade-out');
+        
+        // Reveal mini player
+        if (miniPlayer) {
+            setTimeout(() => {
+                miniPlayer.classList.remove('hidden-player');
+            }, 800);
+        }
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+        
+        // Celebrate!
+        initConfetti();
+    });
+}
+
+// 2. What You Mean To Me glow cards mouse tracker
+function initMeaningCards() {
+    const cards = document.querySelectorAll('.meaning-card');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            card.style.setProperty('--mouse-x', `${x}%`);
+            card.style.setProperty('--mouse-y', `${y}%`);
+        });
+    });
+}
+
+// 3. Cute Relationship Timeline Star Follower
+function initRelationshipTimeline() {
+    const section = document.getElementById('timeline-section');
+    const path = document.getElementById('timeline-star-path');
+    const pathActive = document.getElementById('timeline-star-path-active');
+    const follower = document.getElementById('timeline-star-follower');
+    
+    if (!section || !path || !pathActive || !follower) return;
+    
+    const pathLength = path.getTotalLength();
+    pathActive.style.strokeDasharray = pathLength;
+    pathActive.style.strokeDashoffset = pathLength;
+    
+    function updateTimelineFollower() {
+        const rect = section.getBoundingClientRect();
+        const sectionHeight = rect.height;
+        const viewportHeight = window.innerHeight;
+        
+        const startScroll = rect.top - viewportHeight;
+        const endScroll = rect.bottom - viewportHeight;
+        
+        let progress = -startScroll / (sectionHeight + viewportHeight);
+        progress = Math.max(0, Math.min(1, progress));
+        
+        const drawLength = pathLength * progress;
+        pathActive.style.strokeDashoffset = pathLength - drawLength;
+        
+        try {
+            const point = path.getPointAtLength(drawLength);
+            const container = document.querySelector('.story-timeline-container');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            const xPixel = (point.x / 100) * containerWidth;
+            const yPixel = (point.y / 100) * containerHeight;
+            
+            follower.style.left = `${xPixel}px`;
+            follower.style.top = `${yPixel}px`;
+            follower.style.display = 'block';
+        } catch (e) {
+            follower.style.display = 'none';
+        }
+    }
+    
+    window.addEventListener('scroll', updateTimelineFollower);
+    window.addEventListener('resize', updateTimelineFollower);
+    setTimeout(updateTimelineFollower, 300);
+}
+
+// 4. Birthday Surprise Gift Box Click Event
+function initBirthdaySurprise() {
+    const giftContainer = document.querySelector('.gift-container');
+    const msgBox = document.getElementById('surprise-message-box');
+    const txtEl = document.getElementById('surprise-text');
+    
+    if (!giftContainer || !msgBox || !txtEl) return;
+    
+    const message = `I hope this year gives you every happiness you deserve. And I'll be there beside you for many more birthdays to come ❤️`;
+    let opened = false;
+    
+    giftContainer.addEventListener('click', (e) => {
+        if (opened) return;
+        opened = true;
+        
+        giftContainer.classList.add('open');
+        
+        initConfetti();
+        createHeartShower(e);
+        
+        setTimeout(() => {
+            msgBox.classList.remove('hidden');
+            msgBox.classList.add('visible');
+            startTypewriter(txtEl, message);
+            
+            setTimeout(() => {
+                msgBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        }, 800);
+    });
+}
+
+// 5. Cinematic Final Ending
+function initEndingSection() {
+    const finalBtn = document.getElementById('final-btn');
+    const revealMsg = document.getElementById('final-reveal-msg');
+    
+    if (!finalBtn || !revealMsg) return;
+    
+    finalBtn.addEventListener('click', (e) => {
+        finalBtn.classList.add('hidden');
+        revealMsg.classList.remove('hidden');
+        
+        createHeartShower(e);
+        
+        for (let i = 0; i < 3; i++) {
+            setTimeout(() => {
+                initConfetti();
+            }, i * 400);
+        }
+    });
+}
+
+// 6. Desktop Cursor Sparkle Trail
+function initCursorSparkles() {
+    if (window.innerWidth < 1024) return;
+    
+    let lastSparkleTime = 0;
+    
+    window.addEventListener('mousemove', (e) => {
+        const now = Date.now();
+        if (now - lastSparkleTime > 80) {
+            spawnSparkle(e.clientX, e.clientY);
+            lastSparkleTime = now;
+        }
+    });
+    
+    function spawnSparkle(x, y) {
+        const sparkle = document.createElement('span');
+        sparkle.className = 'cursor-sparkle';
+        sparkle.textContent = Math.random() > 0.5 ? '✨' : '✦';
+        
+        const offsetX = Math.random() * 16 - 8;
+        const offsetY = Math.random() * 16 - 8;
+        
+        sparkle.style.left = `${x + offsetX}px`;
+        sparkle.style.top = `${y + offsetY}px`;
+        sparkle.style.transform = `translate(-50%, -50%) scale(${Math.random() * 0.6 + 0.6})`;
+        
+        document.body.appendChild(sparkle);
+        
+        setTimeout(() => {
+            sparkle.remove();
+        }, 800);
+    }
 }

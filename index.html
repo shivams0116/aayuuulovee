@@ -12,9 +12,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.3">
 </head>
 <body>
+
+    <!-- Welcome Screen Overlay -->
+    <div id="welcome-overlay" class="welcome-overlay">
+        <div class="welcome-content">
+            <div id="welcome-loader" class="welcome-loader">
+                <p class="loader-text">Creating your little birthday universe... ✨</p>
+                <div class="loader-spinner"></div>
+            </div>
+            <div id="welcome-reveal" class="welcome-reveal hidden">
+                <h1 class="welcome-title pulse-heart">Happy Birthday, my favorite person ❤️</h1>
+                <p class="welcome-subtitle">A digital love letter, made especially for you.</p>
+                <div class="welcome-sound-toggle">
+                    <label class="switch">
+                        <input type="checkbox" id="welcome-sound-checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-label">Enable soft chimes & ambient melodies 🎵</span>
+                </div>
+                <button id="enter-btn" class="enter-btn">
+                    <span>Enter Your Universe</span>
+                    <span class="btn-sparkle">✨</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <canvas id="particles-canvas"></canvas>
     <canvas id="confetti-canvas"></canvas>
@@ -33,12 +58,12 @@
     <!-- Sticky Header -->
     <div class="floating-header">
         <div class="logo">For My Favorite Person <span class="pulse-sparkle">✨</span></div>
-        <a href="#music-section" class="mini-player-indicator" id="mini-player-trigger">
+        <div class="mini-player-indicator" id="mini-player-trigger">
             <span class="playing-bar bar-1"></span>
             <span class="playing-bar bar-2"></span>
             <span class="playing-bar bar-3"></span>
             <span class="music-note-icon">🎵</span>
-        </a>
+        </div>
     </div>
 
     <main>
@@ -82,14 +107,51 @@
                         <div class="cake-base"></div>
                     </div>
                 </div>
-                <h2 class="bday-wish-title">Happy Birthday, Aayuu 🎉</h2>
+                <h2 class="bday-wish-title">Happy Birthday, Aayushi 🎉❤️</h2>
                 <p class="bday-wish-text">
-                    Today the universe gets to celebrate the day <em>you</em> were born —<br>
-                    and I'm forever grateful you exist in my world. 🌸<br><br>
-                    May this year bring you everything you've ever dreamed of,<br>
-                    and may every single day of it feel as beautiful as <em>you</em>.
+                    Today is all about celebrating you — the most beautiful part of my life and the person who makes even ordinary days feel special.<br>
+                    Sometimes I still can’t believe that out of all the people in this world, I got lucky enough to find you. 🌸<br><br>
+                    I’m forever grateful for your love, your care, your smile, your voice, and every little moment we’ve shared together. You’ve brought so much warmth and happiness into my life in ways I can’t even fully explain.<br><br>
+                    I hope this year brings you closer to every dream in your heart, fills your days with peace, laughter, success, and gives you countless reasons to smile the way you make me smile every single day.<br><br>
+                    And no matter what, I just want you to know — I’ll always be here, loving you more and more with time. ❤️
                 </p>
                 <div class="bday-stars">✨ 🌟 ⭐ 🌟 ✨</div>
+            </div>
+        </section>
+
+        <!-- SECTION: What You Mean To Me -->
+        <section id="what-you-mean-section" class="section what-you-mean-section">
+            <h2 class="section-title reveal-effect">What You Mean To Me</h2>
+            <p class="section-subtitle reveal-effect">Every day feels complete just because you are in it...</p>
+            <div class="meaning-cards-grid">
+                <div class="meaning-card glass-panel reveal-effect">
+                    <div class="meaning-card-glow"></div>
+                    <div class="meaning-card-content">
+                        <span class="meaning-heart">❤️</span>
+                        <p class="meaning-text">“You make ordinary days feel special.”</p>
+                    </div>
+                </div>
+                <div class="meaning-card glass-panel reveal-effect">
+                    <div class="meaning-card-glow"></div>
+                    <div class="meaning-card-content">
+                        <span class="meaning-heart">✨</span>
+                        <p class="meaning-text">“You’re my comfort place.”</p>
+                    </div>
+                </div>
+                <div class="meaning-card glass-panel reveal-effect">
+                    <div class="meaning-card-glow"></div>
+                    <div class="meaning-card-content">
+                        <span class="meaning-heart">🌸</span>
+                        <p class="meaning-text">“You brought softness into my life.”</p>
+                    </div>
+                </div>
+                <div class="meaning-card glass-panel reveal-effect">
+                    <div class="meaning-card-glow"></div>
+                    <div class="meaning-card-content">
+                        <span class="meaning-heart">🌙</span>
+                        <p class="meaning-text">“Even time feels calmer with you.”</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -136,41 +198,102 @@
         <section id="miss-section" class="section miss-section">
             <h2 class="section-title reveal-effect">Things I Miss</h2>
             <p class="section-subtitle reveal-effect">Every moment away from you is a moment spent wishing you were right next to me...</p>
-            <div class="timeline-container">
-                <div class="timeline-line"></div>
-                <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot"><span class="dot-inner"></span></div>
-                    <div class="timeline-content glass-panel">
-                        <div class="timeline-icon">🌸</div><h3>Your Laugh</h3>
-                        <p>The bright, sweet sound that echoes in my mind and instantly makes my heart skip a beat.</p>
+            <div class="miss-cards-container reveal-effect">
+                <div class="miss-card glass-panel">
+                    <div class="miss-emoji heartbeat-icon">✨</div>
+                    <h3>Your Laugh</h3>
+                    <p>That bright, adorable laugh of yours that instantly plays on repeat in my head and somehow makes my heart melt every single time.</p>
+                </div>
+                <div class="miss-card glass-panel">
+                    <div class="miss-emoji heartbeat-icon">📞</div>
+                    <h3>Our Calls</h3>
+                    <p>Hours passing like minutes while talking to you about the most random things and somehow never running out of things to say.</p>
+                </div>
+                <div class="miss-card glass-panel">
+                    <div class="miss-emoji heartbeat-icon">💫</div>
+                    <h3>Your Voice</h3>
+                    <p>That soft, comforting voice that calms my mind and feels like home, especially on the hardest days. And those special things that you say like "vyakti" :P</p>
+                </div>
+                <div class="miss-card glass-panel">
+                    <div class="miss-emoji heartbeat-icon">🌙</div>
+                    <h3>Your Sleepy Goodnight Texts</h3>
+                    <p>Those half-asleep goodnight texts that remind me I’m the last person you think about before you fall asleep.</p>
+                </div>
+                <div class="miss-card glass-panel">
+                    <div class="miss-emoji heartbeat-icon">🤝</div>
+                    <h3>Holding Your Hand</h3>
+                    <p>The way your hand fits so naturally in mine, like they were always meant to find each other.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Relationship Timeline -->
+        <section id="timeline-section" class="section timeline-section-new">
+            <h2 class="section-title reveal-effect">Our Beautiful Story</h2>
+            <p class="section-subtitle reveal-effect">The moments that led us to celebrating you today...</p>
+            
+            <div class="story-timeline-container reveal-effect">
+                <!-- SVG path for the connecting stars line -->
+                <svg class="timeline-svg-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path id="timeline-star-path" d="M 50,0 Q 30,25 70,50 T 30,75 T 50,100" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="2" stroke-dasharray="5 5"></path>
+                    <path id="timeline-star-path-active" d="M 50,0 Q 30,25 70,50 T 30,75 T 50,100" fill="none" stroke="url(#timeline-grad)" stroke-width="3" stroke-dasharray="6 4" stroke-dashoffset="100"></path>
+                    <defs>
+                        <linearGradient id="timeline-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffb3b0" />
+                            <stop offset="50%" stop-color="#d8b4fe" />
+                            <stop offset="100%" stop-color="#ff7597" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+
+                <div class="timeline-star-follower" id="timeline-star-follower">✨</div>
+                
+                <div class="story-node node-left reveal-effect">
+                    <div class="node-marker">💬</div>
+                    <div class="node-card glass-panel">
+                        <h3>First Conversation</h3>
+                        <p>Where it all began… with a simple “hello” and a quiet “do you want to know more about each other?”</p>
+                        <p>A small moment that changed everything, opening the door to a beautiful little world that became ours.</p>
+                        <span class="node-date">The Beginning</span>
                     </div>
                 </div>
-                <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot"><span class="dot-inner"></span></div>
-                    <div class="timeline-content glass-panel">
-                        <div class="timeline-icon">📞</div><h3>Our Calls</h3>
-                        <p>Losing track of time for hours, talking about everything and absolutely nothing at all.</p>
+                
+                <div class="story-node node-right reveal-effect">
+                    <div class="node-marker">📞</div>
+                    <div class="node-card glass-panel">
+                        <h3>First Long Call</h3>
+                        <p>And that too on Snapchat.</p>
+                        <p>Hours slipped by like seconds as we talked about everything and nothing at the same time, slowly finding comfort in each other’s voices.</p>
+                        <span class="node-date">Connected Hearts</span>
                     </div>
                 </div>
-                <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot"><span class="dot-inner"></span></div>
-                    <div class="timeline-content glass-panel">
-                        <div class="timeline-icon">💫</div><h3>Your Voice</h3>
-                        <p>The soft, comforting tone that acts like a warm blanket on my coldest, hardest days.</p>
+                
+                <div class="story-node node-left reveal-effect">
+                    <div class="node-marker">😂</div>
+                    <div class="node-card glass-panel">
+                        <h3>First Laugh Together</h3>
+                        <p>That moment when our silliness clicked. Your laugh instantly became my favorite song, bringing endless warmth.</p>
+                        <span class="node-date">Silly Moments</span>
                     </div>
                 </div>
-                <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot"><span class="dot-inner"></span></div>
-                    <div class="timeline-content glass-panel">
-                        <div class="timeline-icon">🌙</div><h3>Your Sleepy Goodnight Texts</h3>
-                        <p>The half-asleep texts showing me I'm the very last thing on your mind before you drift off.</p>
+                
+                <div class="story-node node-right reveal-effect">
+                    <div class="node-marker">📸</div>
+                    <div class="node-card glass-panel">
+                        <h3>Favorite Memory</h3>
+                        <p>A day forever frozen in my heart.</p>
+                        <p>That hug… our very first hug at the airport — the moment I held you close, everything suddenly felt complete. Seeing you for the first time felt like my whole life quietly restarted, and in that moment, I realized just how unbelievably special you are to me.</p>
+                        <span class="node-date">Sweet Treasures</span>
                     </div>
                 </div>
-                <div class="timeline-item reveal-effect">
-                    <div class="timeline-dot"><span class="dot-inner"></span></div>
-                    <div class="timeline-content glass-panel">
-                        <div class="timeline-icon">🤝</div><h3>Holding Your Hand</h3>
-                        <p>The feeling of your fingers intertwined with mine — perfectly matching, like we were made for this.</p>
+                
+                <div class="story-node node-center reveal-effect">
+                    <div class="node-marker heartbeat-icon">❤️</div>
+                    <div class="node-card glass-panel final-node-card">
+                        <h3>Today</h3>
+                        <p class="celebrate-text">“Celebrating you ❤️”</p>
+                        <p>Forever grateful for your existence, for your love, and for the beautiful way you make my life feel complete.</p>
+                        <p>And this is just the beginning — I can’t wait to make an infinity of memories with you, while falling more and more in love with you every single day.</p>
                     </div>
                 </div>
             </div>
@@ -182,167 +305,97 @@
             <p class="section-subtitle reveal-effect">Every photo, a whole story I never want to forget 💕</p>
 
             <div class="collage-wrapper reveal-effect">
-
-                <!-- ROW 1: 1 big + 2 stacked -->
-                <div class="collage-row row-a">
-                    <div class="collage-cell cell-big">
-                        <img src="photuu/photo1.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">A night to remember forever 🌃</div>
-                    </div>
-                    <div class="collage-col">
-                        <div class="collage-cell">
-                            <img src="photuu/photo2.jpg" alt="us together" loading="lazy">
-                            <div class="collage-caption">My favourite kind of evening ✨</div>
-                        </div>
-                        <div class="collage-cell">
-                            <img src="photuu/photo3.jpg" alt="us together" loading="lazy">
-                            <div class="collage-caption">You light up every room 🌸</div>
-                        </div>
-                    </div>
+                <!-- Group 1: Cafe & Food Dates -->
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo4.jpg" alt="Mitti Cafe coaster" loading="lazy">
+                    <div class="collage-caption">Our cozy coffee dates at Mitti Cafe ☕️🌾</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo11.jpg" alt="Selfie at Mitti Cafe" loading="lazy">
+                    <div class="collage-caption">Cozy selfie at our favorite coffee spot ☕️💞</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo12.jpg" alt="Iced coffees at Mitti Cafe" loading="lazy">
+                    <div class="collage-caption">Our iced coffee fuel 🧊☕️</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo2.jpg" alt="Pasta dinner date" loading="lazy">
+                    <div class="collage-caption">Yummy pasta dates are the best! 🍝❤️</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo3.jpg" alt="Mango cake dessert" loading="lazy">
+                    <div class="collage-caption">A sweet treat for the sweetest girl 🍰✨</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo20.jpg" alt="Two coffees at a cafe" loading="lazy">
+                    <div class="collage-caption">Coffee dates are our love language ☕️✨</div>
                 </div>
 
-                <!-- ROW 2: 3 equal -->
-                <div class="collage-row row-b">
-                    <div class="collage-cell">
-                        <img src="photuu/photo4.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">Always laughing with you 😄</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo5.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">These moments are everything 💫</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo6.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">My happy place is wherever you are 💖</div>
-                    </div>
+                <!-- Group 2: Dinner & Restaurant Date Nights -->
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo1.jpg" alt="Rooftop night with friends" loading="lazy">
+                    <div class="collage-caption">Rooftop night with our favorite people! 🌃✨</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo5.jpg" alt="Dinner date at fancy restaurant" loading="lazy">
+                    <div class="collage-caption">Dressed up for a beautiful dinner date 🥂✨</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo7.jpg" alt="Shivam and Aayuu standing together" loading="lazy">
+                    <div class="collage-caption">Lush greens and your beautiful smile 🌿💖</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo8.jpg" alt="Aayuu at one8 Commune" loading="lazy">
+                    <div class="collage-caption">Looking gorgeous at one8 Commune! 🌟</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo10.jpg" alt="Shivam and Aayuu at one8 Commune" loading="lazy">
+                    <div class="collage-caption">Holding you close at one8 Commune 🥂❤️</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo13.jpg" alt="Aayuu talking on phone at Havmor" loading="lazy">
+                    <div class="collage-caption">Catching you mid-laugh (and ice cream runs!) 🍦📞</div>
                 </div>
 
-                <!-- ROW 3: 2 stacked + 1 big -->
-                <div class="collage-row row-a row-reverse">
-                    <div class="collage-col">
-                        <div class="collage-cell">
-                            <img src="photuu/photo7.jpg" alt="us together" loading="lazy">
-                            <div class="collage-caption">Together is my favourite place 🌷</div>
-                        </div>
-                        <div class="collage-cell">
-                            <img src="photuu/photo8.jpg" alt="us together" loading="lazy">
-                            <div class="collage-caption">I'd choose you every time 💝</div>
-                        </div>
-                    </div>
-                    <div class="collage-cell cell-big">
-                        <img src="photuu/photo9.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">This smile means the world to me 🥰</div>
-                    </div>
+                <!-- Group 3: Cozy Home Selfies -->
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo16.jpg" alt="Aayuu leaning on Shivam's shoulder" loading="lazy">
+                    <div class="collage-caption">Resting your head on my shoulder — my absolute favorite feeling 💑💖</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo17.jpg" alt="Smiling selfie with tilak" loading="lazy">
+                    <div class="collage-caption">Matching smiles, matching hearts 🌹✨</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo24.jpg" alt="Close up selfie with tilak" loading="lazy">
+                    <div class="collage-caption">Close-up of my favorite face in the world 💋🌸</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo27.jpg" alt="Shivam looking at Aayuu selfie" loading="lazy">
+                    <div class="collage-caption">Looking at you and wondering how I got so lucky 🥺💖</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo28.jpg" alt="Couple smiling look down selfie" loading="lazy">
+                    <div class="collage-caption">Those sweet, quiet smiles with you 💖</div>
+                </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo18.jpg" alt="Selfie with paintings" loading="lazy">
+                    <div class="collage-caption">Exploring art, but you are the masterpiece 🎨💖</div>
                 </div>
 
-                <!-- ROW 4: 4 equal small -->
-                <div class="collage-row row-c">
-                    <div class="collage-cell">
-                        <img src="photuu/photo10.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">Pure joy 💞</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo11.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">This is us 🌹</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo12.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">I miss this so much 🫶</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo13.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">My whole heart ❤️</div>
-                    </div>
+                <!-- Group 4: Playful Mirror Selfies -->
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo14.jpg" alt="Mirror selfie in Real Madrid jersey" loading="lazy">
+                    <div class="collage-caption">Real Madrid fans, but I'm your biggest fan! ⚽️🤍</div>
                 </div>
-
-                <!-- ROW 5: 1 big + 2 stacked -->
-                <div class="collage-row row-a">
-                    <div class="collage-cell cell-big">
-                        <img src="photuu/photo14.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">Look how gorgeous you are 🌟</div>
-                    </div>
-                    <div class="collage-col">
-                        <div class="collage-cell">
-                            <img src="photuu/photo15.jpg" alt="us together" loading="lazy">
-                            <div class="collage-caption">Every day with you is a gift 🎁</div>
-                        </div>
-                        <div class="collage-cell">
-                            <img src="photuu/photo16.jpg" alt="us together" loading="lazy">
-                            <div class="collage-caption">You're my kind of perfect 💫</div>
-                        </div>
-                    </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo29.jpg" alt="Silly mirror selfie in Real Madrid jersey" loading="lazy">
+                    <div class="collage-caption">Ending the day with a silly mirror selfie 🤳🤪</div>
                 </div>
-
-                <!-- ROW 6: 3 equal -->
-                <div class="collage-row row-b">
-                    <div class="collage-cell">
-                        <img src="photuu/photo17.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">I love your energy 🌈</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo18.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">So many memories, still making more ✨</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo19.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">Captured forever in my heart 📸</div>
-                    </div>
+                <div class="collage-cell">
+                    <img src="photuu_optimized/photo22.jpg" alt="Mirror selfie in matching black" loading="lazy">
+                    <div class="collage-caption">Hugging you tight in matching black outfits 🖤✨</div>
                 </div>
-
-                <!-- ROW 7: 4 small -->
-                <div class="collage-row row-c">
-                    <div class="collage-cell">
-                        <img src="photuu/photo20.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">Just us 🌸</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo21.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">My favourite human 💜</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo22.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">The best moments 🌷</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo23.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">Nothing beats this 💖</div>
-                    </div>
-                </div>
-
-                <!-- ROW 8: 2 stacked + 1 big -->
-                <div class="collage-row row-a row-reverse">
-                    <div class="collage-col">
-                        <div class="collage-cell">
-                            <img src="photuu/photo24.jpg" alt="us together" loading="lazy">
-                            <div class="collage-caption">You make life colourful 🌈</div>
-                        </div>
-                        <div class="collage-cell">
-                            <img src="photuu/photo25.jpg" alt="us together" loading="lazy">
-                            <div class="collage-caption">Here's to a thousand more 🥂</div>
-                        </div>
-                    </div>
-                    <div class="collage-cell cell-big">
-                        <img src="photuu/photo26.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">Endlessly, infinitely yours ❤️</div>
-                    </div>
-                </div>
-
-                <!-- ROW 9: 3 equal (last 3 photos) -->
-                <div class="collage-row row-b">
-                    <div class="collage-cell">
-                        <img src="photuu/photo27.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">Always and forever 💫</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo28.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">I love you more every day 🌹</div>
-                    </div>
-                    <div class="collage-cell">
-                        <img src="photuu/photo29.jpg" alt="us together" loading="lazy">
-                        <div class="collage-caption">My whole world 🌎💕</div>
-                    </div>
-                </div>
-
             </div>
         </section>
 
@@ -361,6 +414,29 @@
             </div>
         </section>
 
+        <!-- SECTION: Birthday Surprise -->
+        <section id="surprise-section" class="section surprise-section">
+            <h2 class="section-title reveal-effect">A Birthday Surprise 🎁</h2>
+            <p class="section-subtitle reveal-effect">Click below to open a little gift from my heart...</p>
+            
+            <div class="gift-container reveal-effect">
+                <div class="gift-box" id="gift-box">
+                    <div class="gift-lid"></div>
+                    <div class="gift-ribbon-horizontal"></div>
+                    <div class="gift-ribbon-vertical"></div>
+                    <div class="gift-body"></div>
+                </div>
+                <div class="gift-sparkles">✨ 🌟 💖 🌟 ✨</div>
+            </div>
+            
+            <div class="surprise-message-box glass-panel hidden" id="surprise-message-box">
+                <div class="surprise-glow-aura"></div>
+                <div class="surprise-text-container">
+                    <p id="surprise-text" class="surprise-typewriter-text"></p>
+                </div>
+            </div>
+        </section>
+
         <!-- SECTION 5: Interactive -->
         <section id="interactive-section" class="section interactive-section">
             <div class="interactive-container glass-panel reveal-effect" id="hug-box">
@@ -375,6 +451,23 @@
                     <span class="hug-emoji">🫂</span>
                     <p class="hug-text">Come here, let me hug you</p>
                     <p class="hug-subtext">A huge, tight hug has been sent straight to your heart. I'm right here with you.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Final Ending -->
+        <section id="ending-section" class="section ending-section">
+            <div class="ending-nebula"></div>
+            <div class="ending-content">
+                <h2 class="ending-phrase reveal-effect">In every lifetime, I’d still choose you.</h2>
+                <div class="final-interactive reveal-effect">
+                    <button class="final-btn" id="final-btn">
+                        <span>One more thing…</span>
+                        <span class="final-btn-glow"></span>
+                    </button>
+                    <div class="final-reveal-msg hidden" id="final-reveal-msg">
+                        <h3 class="final-thank-you heartbeat-icon">Thank you for existing. ❤️</h3>
+                    </div>
                 </div>
             </div>
         </section>
@@ -442,6 +535,48 @@
         <div class="footer-decoration"><span class="heart-pulse">❤️</span></div>
     </footer>
 
+    <!-- Lightbox / Photo Viewer -->
+    <div id="photo-lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="Zoomed view">
+            <div id="lightbox-caption" class="lightbox-caption"></div>
+        </div>
+        <a class="lightbox-prev">&#10094;</a>
+        <a class="lightbox-next">&#10095;</a>
+    </div>
+
+    <!-- Floating Mini Music Player -->
+    <div class="mini-music-player glass-panel" id="mini-music-player">
+        <div class="mini-vinyl-wrapper" id="mini-vinyl-wrapper">
+            <div class="mini-vinyl" id="mini-vinyl">
+                <div class="mini-vinyl-center"></div>
+            </div>
+            <div class="music-notes-container">
+                <span class="floating-note note-1">♪</span>
+                <span class="floating-note note-2">♫</span>
+                <span class="floating-note note-3">♬</span>
+            </div>
+        </div>
+        <div class="mini-player-info">
+            <div class="mini-track-details">
+                <span class="mini-track-name" id="mini-track-name">Romantic Moods</span>
+                <span class="mini-track-artist">Handcrafted for You</span>
+            </div>
+            <div class="mini-player-controls">
+                <button class="mini-control-btn" id="mini-play-btn" aria-label="Play/Pause">
+                    <svg id="mini-play-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <svg id="mini-pause-icon" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                </button>
+                <div class="mini-volume-wrapper">
+                    <span class="mini-volume-icon">🔈</span>
+                    <input type="range" id="mini-volume" class="mini-volume-slider" min="0" max="100" value="70">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop src="love-story.mp3"></audio>
     <script src="script.js"></script>
 </body>
 </html>
