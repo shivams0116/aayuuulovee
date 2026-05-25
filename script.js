@@ -446,157 +446,270 @@ function createHeartShower(event) {
    6. DYNAMIC WEB AUDIO API SYNTHESIZER & MINI PLAYER CONTROLS
    ========================================================================== */
 let audioCtx = null;
-let synthIntervals = [];
-let isSynthPlaying = false;
 let synthVolumeNode = null;
+let delayNode = null;
+let delayFeedback = null;
+let isSynthPlaying = false;
+let currentNoteTimeout = null;
+let currentMelodyIndex = 0;
+let elapsedBeats = 0;
+const tempo = 120; // 120 BPM (2 beats per second)
+const beatDuration = 60 / tempo; // 0.5s per beat
+
+const NOTE_FREQS = {
+    "C3": 130.81, "D3": 146.83, "E3": 164.81, "F3": 174.61, "G3": 196.00, "A3": 220.00, "Bb3": 233.08, "B3": 246.94,
+    "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23, "G4": 392.00, "A4": 440.00, "Bb4": 466.16, "B4": 493.88,
+    "C5": 523.25, "D5": 587.33, "E5": 659.25, "F5": 698.46, "G5": 783.99, "A5": 880.00
+};
+
+const happyBirthdayNotes = [
+    // Phrase 1: Happy Birthday to You
+    { note: "C4", duration: 0.75 },
+    { note: "C4", duration: 0.25 },
+    { note: "D4", duration: 1.0 },
+    { note: "C4", duration: 1.0 },
+    { note: "F4", duration: 1.0 },
+    { note: "E4", duration: 2.0 },
+    { note: "REST", duration: 0.5 },
+
+    // Phrase 2: Happy Birthday to You
+    { note: "C4", duration: 0.75 },
+    { note: "C4", duration: 0.25 },
+    { note: "D4", duration: 1.0 },
+    { note: "C4", duration: 1.0 },
+    { note: "G4", duration: 1.0 },
+    { note: "F4", duration: 2.0 },
+    { note: "REST", duration: 0.5 },
+
+    // Phrase 3: Happy Birthday Dear Aayushi
+    { note: "C4", duration: 0.75 },
+    { note: "C4", duration: 0.25 },
+    { note: "C5", duration: 1.0 },
+    { note: "A4", duration: 1.0 },
+    { note: "F4", duration: 1.0 },
+    { note: "E4", duration: 1.0 },
+    { note: "D4", duration: 2.0 },
+    { note: "REST", duration: 0.5 },
+
+    // Phrase 4: Happy Birthday to You
+    { note: "Bb4", duration: 0.75 },
+    { note: "Bb4", duration: 0.25 },
+    { note: "A4", duration: 1.0 },
+    { note: "F4", duration: 1.0 },
+    { note: "G4", duration: 1.0 },
+    { note: "F4", duration: 2.0 },
+    { note: "REST", duration: 2.0 }
+];
+
+const totalBeats = happyBirthdayNotes.reduce((sum, n) => sum + n.duration, 0);
 
 function initSynth() {
+    if (audioCtx) return;
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return;
     audioCtx = new AudioContextClass();
     
     synthVolumeNode = audioCtx.createGain();
-    synthVolumeNode.gain.setValueAtTime(0.7, audioCtx.currentTime);
+    const volumeSlider = document.getElementById('mini-volume');
+    const startVolume = volumeSlider ? parseInt(volumeSlider.value) / 100 : 0.7;
+    synthVolumeNode.gain.setValueAtTime(startVolume, audioCtx.currentTime);
     synthVolumeNode.connect(audioCtx.destination);
+    
+    // Create feedback delay effect for dreamy cathedral music box echo
+    delayNode = audioCtx.createDelay(1.5);
+    delayNode.delayTime.setValueAtTime(0.35, audioCtx.currentTime); // 350ms delay
+    
+    delayFeedback = audioCtx.createGain();
+    delayFeedback.gain.setValueAtTime(0.35, audioCtx.currentTime); // 35% feedback loop
+    
+    delayNode.connect(delayFeedback);
+    delayFeedback.connect(delayNode);
+    delayNode.connect(synthVolumeNode);
+    
+    // Inject custom CSS styling for dynamic floating note icons
+    const style = document.createElement('style');
+    style.textContent = `
+        .dynamic-float-note {
+            font-size: 16px;
+            filter: drop-shadow(0 2px 4px rgba(255, 117, 151, 0.45));
+            color: #ff7597;
+            user-select: none;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function playMusicBoxNote(frequency, duration) {
+    if (!audioCtx || audioCtx.state === 'suspended') return;
+    
+    const now = audioCtx.currentTime;
+    
+    // 1. Fundamental
+    const osc1 = audioCtx.createOscillator();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(frequency, now);
+    
+    // 2. High Octave Overtones for metal comb chime resonance
+    const osc2 = audioCtx.createOscillator();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(frequency * 2, now);
+    
+    const osc3 = audioCtx.createOscillator();
+    osc3.type = 'sine';
+    osc3.frequency.setValueAtTime(frequency * 3, now);
+    
+    // Gain Envelopes
+    const gain1 = audioCtx.createGain();
+    const gain2 = audioCtx.createGain();
+    const gain3 = audioCtx.createGain();
+    const voiceMix = audioCtx.createGain();
+    
+    // Fundamental pluck & decay
+    gain1.gain.setValueAtTime(0, now);
+    gain1.gain.linearRampToValueAtTime(0.35, now + 0.005);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + duration * 1.5);
+    
+    // Octave overtone
+    gain2.gain.setValueAtTime(0, now);
+    gain2.gain.linearRampToValueAtTime(0.1, now + 0.01);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.8);
+    
+    // 3rd harmonic
+    gain3.gain.setValueAtTime(0, now);
+    gain3.gain.linearRampToValueAtTime(0.04, now + 0.015);
+    gain3.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.5);
+    
+    osc1.connect(gain1);
+    osc2.connect(gain2);
+    osc3.connect(gain3);
+    
+    gain1.connect(voiceMix);
+    gain2.connect(voiceMix);
+    gain3.connect(voiceMix);
+    
+    // Split output to direct destination and the echo unit
+    voiceMix.connect(delayNode);
+    voiceMix.connect(synthVolumeNode);
+    
+    osc1.start(now);
+    osc2.start(now);
+    osc3.start(now);
+    
+    osc1.stop(now + duration * 1.8);
+    osc2.stop(now + duration * 1.8);
+    osc3.stop(now + duration * 1.8);
+}
+
+function spawnFloatingNoteUI() {
+    const miniPlayer = document.getElementById('mini-music-player');
+    if (!miniPlayer || miniPlayer.classList.contains('hidden-player')) return;
+    
+    const floatingElement = document.createElement('span');
+    floatingElement.className = 'dynamic-float-note';
+    floatingElement.textContent = Math.random() > 0.55 ? '🎵' : '❤️';
+    
+    const vinylWrapper = document.getElementById('mini-vinyl-wrapper');
+    if (vinylWrapper) {
+        const rect = vinylWrapper.getBoundingClientRect();
+        const x = rect.left + rect.width / 2 + (Math.random() * 20 - 10);
+        const y = rect.top + rect.height / 2 + (Math.random() * 20 - 10);
+        
+        floatingElement.style.left = `${x}px`;
+        floatingElement.style.top = `${y}px`;
+        floatingElement.style.position = 'fixed';
+        floatingElement.style.zIndex = '999999';
+        floatingElement.style.pointerEvents = 'none';
+        
+        floatingElement.style.transition = 'all 1.6s cubic-bezier(0.215, 0.610, 0.355, 1)';
+        document.body.appendChild(floatingElement);
+        
+        requestAnimationFrame(() => {
+            floatingElement.style.transform = `translate(${(Math.random() * 60 - 30)}px, -130px) scale(${Math.random() * 0.4 + 0.8})`;
+            floatingElement.style.opacity = '0';
+        });
+        
+        setTimeout(() => {
+            floatingElement.remove();
+        }, 1600);
+    }
+}
+
+function updateProgressBar(percent) {
+    const progressBar = document.getElementById('progress-bar');
+    const progressDot = document.querySelector('.progress-dot');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationTimeEl = document.getElementById('duration-time');
+    
+    if (progressBar) progressBar.style.width = `${percent}%`;
+    if (progressDot) progressDot.style.left = `${percent}%`;
+    
+    if (currentTimeEl && durationTimeEl) {
+        const totalDuration = totalBeats * beatDuration;
+        const currentSeconds = elapsedBeats * beatDuration;
+        
+        const formatTime = (secs) => {
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        };
+        
+        currentTimeEl.textContent = formatTime(currentSeconds);
+        durationTimeEl.textContent = formatTime(totalDuration);
+    }
+}
+
+function playMelodyLoop() {
+    if (!isSynthPlaying) return;
+    
+    const currentNote = happyBirthdayNotes[currentMelodyIndex];
+    
+    if (currentNote.note !== "REST") {
+        const freq = NOTE_FREQS[currentNote.note];
+        if (freq) {
+            playMusicBoxNote(freq, currentNote.duration * beatDuration);
+            spawnFloatingNoteUI();
+        }
+    }
+    
+    const progressPercent = (elapsedBeats / totalBeats) * 100;
+    updateProgressBar(progressPercent);
+    
+    elapsedBeats += currentNote.duration;
+    if (elapsedBeats >= totalBeats) {
+        elapsedBeats = 0;
+    }
+    
+    const noteTime = currentNote.duration * beatDuration * 1000;
+    currentMelodyIndex = (currentMelodyIndex + 1) % happyBirthdayNotes.length;
+    currentNoteTimeout = setTimeout(playMelodyLoop, noteTime);
 }
 
 function startSynthMelody() {
-    if (!audioCtx) initSynth();
-    if (audioCtx.state === 'suspended') {
+    initSynth();
+    if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
     }
-    
     if (isSynthPlaying) return;
     isSynthPlaying = true;
-    
-    // Warm romantic chord progression pads: Cmaj7 - Am7 - Fmaj7 - G6
-    const chords = [
-        [130.81, 164.81, 196.00, 246.94], // Cmaj7
-        [110.00, 130.81, 164.81, 196.00], // Am7
-        [87.31, 220.00, 261.63, 329.63],  // Fmaj7
-        [98.00, 246.94, 293.66, 329.63]   // G6
-    ];
-    
-    let currentChordIndex = 0;
-    const chordDuration = 6.0;
-    
-    function playPadChord(frequencies) {
-        if (!isSynthPlaying) return;
-        
-        const now = audioCtx.currentTime;
-        frequencies.forEach(freq => {
-            const osc = audioCtx.createOscillator();
-            const filter = audioCtx.createBiquadFilter();
-            const gainNode = audioCtx.createGain();
-            
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, now);
-            
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(450, now);
-            
-            gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(0.08 / frequencies.length, now + 2.0);
-            gainNode.gain.setValueAtTime(0.08 / frequencies.length, now + chordDuration - 1.5);
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + chordDuration);
-            
-            osc.connect(filter);
-            filter.connect(gainNode);
-            gainNode.connect(synthVolumeNode);
-            
-            osc.start(now);
-            osc.stop(now + chordDuration);
-        });
-    }
-    
-    function chordLoop() {
-        if (!isSynthPlaying) return;
-        playPadChord(chords[currentChordIndex]);
-        currentChordIndex = (currentChordIndex + 1) % chords.length;
-        
-        const padTimer = setTimeout(chordLoop, chordDuration * 1000 - 50);
-        synthIntervals.push(padTimer);
-    }
-    
-    chordLoop();
-    
-    // Sparkling chime box notes (Pentatonic major for guaranteed harmony)
-    const melodyNotes = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
-    
-    function playChime() {
-        if (!isSynthPlaying) return;
-        const now = audioCtx.currentTime;
-        const note = melodyNotes[Math.floor(Math.random() * melodyNotes.length)];
-        
-        const osc = audioCtx.createOscillator();
-        const filter = audioCtx.createBiquadFilter();
-        const gainNode = audioCtx.createGain();
-        
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(note, now);
-        
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1200, now);
-        
-        gainNode.gain.setValueAtTime(0, now);
-        gainNode.gain.linearRampToValueAtTime(0.12, now + 0.02);
-        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 3.0);
-        
-        osc.connect(filter);
-        filter.connect(gainNode);
-        gainNode.connect(synthVolumeNode);
-        
-        osc.start(now);
-        osc.stop(now + 3.2);
-        
-        const nextTime = Math.random() * 3000 + 2000;
-        const chimeTimer = setTimeout(playChime, nextTime);
-        synthIntervals.push(chimeTimer);
-    }
-    
-    const startChimeTimer = setTimeout(playChime, 1500);
-    synthIntervals.push(startChimeTimer);
+    playMelodyLoop();
 }
 
 function stopSynthMelody() {
     isSynthPlaying = false;
-    synthIntervals.forEach(timer => clearTimeout(timer));
-    synthIntervals = [];
+    if (currentNoteTimeout) {
+        clearTimeout(currentNoteTimeout);
+        currentNoteTimeout = null;
+    }
 }
 
-let useSynthFallback = false;
-
 function toggleMusic(forcePlay = null) {
-    const audio = document.getElementById('bg-music');
-    const isPlaying = useSynthFallback ? isSynthPlaying : (audio ? !audio.paused : false);
-    const shouldPlay = (forcePlay !== null) ? forcePlay : !isPlaying;
+    const shouldPlay = (forcePlay !== null) ? forcePlay : !isSynthPlaying;
     
     if (shouldPlay) {
-        if (useSynthFallback) {
-            startSynthMelody();
-            if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
-        } else if (audio) {
-            audio.play()
-                .then(() => {
-                    if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
-                })
-                .catch(err => {
-                    console.warn("MP3 playback failed. Falling back to Web Audio synthesizer.", err);
-                    useSynthFallback = true;
-                    startSynthMelody();
-                    if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
-                });
-        } else {
-            useSynthFallback = true;
-            startSynthMelody();
-            if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
-        }
+        startSynthMelody();
+        if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(true);
     } else {
-        if (useSynthFallback) {
-            stopSynthMelody();
-        } else if (audio) {
-            audio.pause();
-        }
+        stopSynthMelody();
         if (window.updateMiniPlayerUI) window.updateMiniPlayerUI(false);
     }
 }
@@ -607,114 +720,80 @@ function initMiniPlayer() {
     const playIcon      = document.getElementById('mini-play-icon');
     const pauseIcon     = document.getElementById('mini-pause-icon');
     const vinyl         = document.getElementById('mini-vinyl');
-    const volumeSlider  = document.getElementById('mini-volume');
-    const trackNameEl   = document.getElementById('mini-track-name');
+    const miniVolumeSlider  = document.getElementById('mini-volume');
+    const mainVolumeSlider  = document.getElementById('volume-slider');
+    const mainPlayBtn       = document.getElementById('play-pause-btn');
+    const trackNameEl       = document.getElementById('mini-track-name');
+    const mainTrackNameEl   = document.getElementById('track-name');
+    const mainTrackArtistEl = document.querySelector('.track-details .track-artist');
+    const miniTrackArtistEl = document.querySelector('.mini-track-details .mini-track-artist');
 
     if (!miniPlayer || !playBtn || !vinyl) return;
 
-    // Update track name label
-    if (trackNameEl) trackNameEl.textContent = 'Love Story';
+    // Change labels to Happy Birthday
+    if (trackNameEl) trackNameEl.textContent = 'Happy Birthday';
+    if (mainTrackNameEl) mainTrackNameEl.textContent = 'Happy Birthday';
+    if (mainTrackArtistEl) mainTrackArtistEl.textContent = 'Instrumental';
+    if (miniTrackArtistEl) miniTrackArtistEl.textContent = 'Instrumental';
 
-    // ── YouTube IFrame API ─────────────────────────────────────────────────
-    // Love Story – Taylor Swift  (YouTube video ID)
-    const YT_VIDEO_ID = 'S2kB6k-kPKI';
-    let ytPlayer = null;
-    let ytReady  = false;
-    let isPlaying = false;
-
-    // Hidden container for the YouTube iframe
-    const ytContainer = document.createElement('div');
-    ytContainer.id = 'yt-player-container';
-    ytContainer.style.cssText = 'position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;pointer-events:none;opacity:0;';
-    document.body.appendChild(ytContainer);
-
-    // Load YouTube IFrame API script once
-    function loadYTApi() {
-        if (document.getElementById('yt-api-script')) return;
-        const tag = document.createElement('script');
-        tag.id  = 'yt-api-script';
-        tag.src = 'https://www.youtube.com/iframe_api';
-        document.head.appendChild(tag);
-    }
-
-    // Called by YouTube API when ready
-    window.onYouTubeIframeAPIReady = function () {
-        ytPlayer = new YT.Player('yt-player-container', {
-            height: '1',
-            width:  '1',
-            videoId: YT_VIDEO_ID,
-            playerVars: {
-                autoplay: 0,
-                controls: 0,
-                rel:      0,
-                showinfo: 0,
-                modestbranding: 1,
-                playsinline: 1
-            },
-            events: {
-                onReady: (e) => {
-                    ytReady = true;
-                    e.target.setVolume(volumeSlider ? parseInt(volumeSlider.value) : 70);
-                },
-                onStateChange: (e) => {
-                    // YT.PlayerState.PLAYING = 1
-                    if (e.data === 1) {
-                        isPlaying = true;
-                        updateUI(true);
-                    } else if (e.data === 2 || e.data === 0) {
-                        // PAUSED or ENDED
-                        isPlaying = false;
-                        updateUI(false);
-                    }
-                },
-                onError: () => {
-                    console.warn('YouTube player error — check network or video ID.');
-                }
-            }
-        });
-    };
-
-    loadYTApi();
-
-    // ── UI helpers ─────────────────────────────────────────────────────────
     function updateUI(playing) {
-        if (playing) {
-            playIcon.classList.add('hidden');
-            pauseIcon.classList.remove('hidden');
-            vinyl.classList.add('playing');
-        } else {
-            playIcon.classList.remove('hidden');
-            pauseIcon.classList.add('hidden');
-            vinyl.classList.remove('playing');
+        // Mini player controls
+        if (playIcon) {
+            if (playing) playIcon.classList.add('hidden');
+            else playIcon.classList.remove('hidden');
+        }
+        if (pauseIcon) {
+            if (playing) pauseIcon.classList.remove('hidden');
+            else pauseIcon.classList.add('hidden');
+        }
+        if (vinyl) {
+            if (playing) vinyl.classList.add('playing');
+            else vinyl.classList.remove('playing');
+        }
+
+        // Main player controls
+        const mainPlayIcon = document.getElementById('play-icon');
+        const mainPauseIcon = document.getElementById('pause-icon');
+        const mainVinyl = document.getElementById('vinyl-disc');
+        
+        if (mainPlayIcon) {
+            if (playing) mainPlayIcon.classList.add('hidden');
+            else mainPlayIcon.classList.remove('hidden');
+        }
+        if (mainPauseIcon) {
+            if (playing) mainPauseIcon.classList.remove('hidden');
+            else mainPauseIcon.classList.add('hidden');
+        }
+        if (mainVinyl) {
+            if (playing) mainVinyl.classList.add('playing');
+            else mainVinyl.classList.remove('playing');
         }
     }
 
-    function toggleMusic() {
-        if (!ytReady) {
-            // API not ready yet — show a brief hint
-            if (trackNameEl) {
-                trackNameEl.textContent = 'Loading...';
-                setTimeout(() => { trackNameEl.textContent = 'Love Story'; }, 1500);
-            }
-            return;
+    function syncVolume(value) {
+        const vol = parseInt(value) / 100;
+        if (!audioCtx) initSynth();
+        if (synthVolumeNode) {
+            synthVolumeNode.gain.setValueAtTime(vol, audioCtx.currentTime);
         }
-        if (isPlaying) {
-            ytPlayer.pauseVideo();
-        } else {
-            ytPlayer.playVideo();
-        }
+        
+        if (mainVolumeSlider) mainVolumeSlider.value = value;
+        if (miniVolumeSlider) miniVolumeSlider.value = value;
     }
 
-    // ── Controls ───────────────────────────────────────────────────────────
-    playBtn.addEventListener('click', toggleMusic);
-
-    if (volumeSlider) {
-        volumeSlider.addEventListener('input', () => {
-            if (ytReady) ytPlayer.setVolume(parseInt(volumeSlider.value));
-        });
+    // Attach controls
+    playBtn.addEventListener('click', () => toggleMusic());
+    if (mainPlayBtn) {
+        mainPlayBtn.addEventListener('click', () => toggleMusic());
     }
 
-    // Expose globally so welcome screen can trigger play after unlock
+    if (miniVolumeSlider) {
+        miniVolumeSlider.addEventListener('input', (e) => syncVolume(e.target.value));
+    }
+    if (mainVolumeSlider) {
+        mainVolumeSlider.addEventListener('input', (e) => syncVolume(e.target.value));
+    }
+
     window.toggleMusic = toggleMusic;
     window.updateMiniPlayerUI = updateUI;
 }
