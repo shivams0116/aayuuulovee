@@ -341,7 +341,11 @@ function startTypewriter(element, text) {
     function type() {
         if (index < text.length) {
             const char = text.charAt(index);
-            element.innerHTML += char;
+            if (char === '\n') {
+                element.innerHTML += '<br>';
+            } else {
+                element.innerHTML += char;
+            }
             index++;
             
             // Autoscroll letter paper as typing progresses
@@ -1079,7 +1083,7 @@ function initBirthdaySurprise() {
     
     if (!giftContainer || !msgBox || !txtEl) return;
     
-    const message = `I hope this year gives you every happiness you deserve. And I'll be there beside you for many more birthdays to come ❤️`;
+    const message = `Bas itna sa wish hai ki yeh saal tumhe har woh happiness de jo tum truly deserve karti ho — the kind that shows in your smile, your eyes, and those little happy moments you quietly cherish. ❤️\n\nAur sach bolu… jab bhi I think about us, my mind instantly goes back to Indore — our hugs, our coffee dates, holding your hand, those random selfies, and every little moment that somehow became my favorite memory. Meeting you there felt so unreal and special, like life finally gave me something it knew I'd protect forever. 🌸\n\nAnd now I just want more of us — more memories, more laughs, more late-night calls, more trips, more hugs, and many more birthdays where I get to stand beside you and celebrate the most beautiful person in my life. ❤️`;
     let opened = false;
     
     giftContainer.addEventListener('click', (e) => {
