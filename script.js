@@ -453,8 +453,8 @@ let isSynthPlaying = false;
 let currentNoteTimeout = null;
 let currentMelodyIndex = 0;
 let elapsedBeats = 0;
-const tempo = 120; // 120 BPM (2 beats per second)
-const beatDuration = 60 / tempo; // 0.5s per beat
+const tempo = 90; // Slower, softer tempo (90 BPM) for a more dreamy, romantic waltz feel
+const beatDuration = 60 / tempo; // 0.66s per beat
 
 const NOTE_FREQS = {
     "C3": 130.81, "D3": 146.83, "E3": 164.81, "F3": 174.61, "G3": 196.00, "A3": 220.00, "Bb3": 233.08, "B3": 246.94,
@@ -464,44 +464,78 @@ const NOTE_FREQS = {
 
 const happyBirthdayNotes = [
     // Phrase 1: Happy Birthday to You
-    { note: "C4", duration: 0.75 },
+    { note: "C4", duration: 0.75, chord: ["C3", "E3", "G3"] },
     { note: "C4", duration: 0.25 },
     { note: "D4", duration: 1.0 },
     { note: "C4", duration: 1.0 },
-    { note: "F4", duration: 1.0 },
+    { note: "F4", duration: 1.0, chord: ["F3", "A3", "C4"] },
     { note: "E4", duration: 2.0 },
     { note: "REST", duration: 0.5 },
 
     // Phrase 2: Happy Birthday to You
-    { note: "C4", duration: 0.75 },
+    { note: "C4", duration: 0.75, chord: ["C3", "E3", "G3"] },
     { note: "C4", duration: 0.25 },
     { note: "D4", duration: 1.0 },
     { note: "C4", duration: 1.0 },
-    { note: "G4", duration: 1.0 },
+    { note: "G4", duration: 1.0, chord: ["G3", "B3", "D4"] },
     { note: "F4", duration: 2.0 },
     { note: "REST", duration: 0.5 },
 
     // Phrase 3: Happy Birthday Dear Aayushi
-    { note: "C4", duration: 0.75 },
+    { note: "C4", duration: 0.75, chord: ["C3", "E3", "G3"] },
     { note: "C4", duration: 0.25 },
     { note: "C5", duration: 1.0 },
-    { note: "A4", duration: 1.0 },
+    { note: "A4", duration: 1.0, chord: ["F3", "A3", "C4"] },
     { note: "F4", duration: 1.0 },
     { note: "E4", duration: 1.0 },
-    { note: "D4", duration: 2.0 },
+    { note: "D4", duration: 2.0, chord: ["G3", "B3", "D4"] },
     { note: "REST", duration: 0.5 },
 
     // Phrase 4: Happy Birthday to You
-    { note: "Bb4", duration: 0.75 },
+    { note: "Bb4", duration: 0.75, chord: ["Bb3", "D4", "F4"] },
     { note: "Bb4", duration: 0.25 },
     { note: "A4", duration: 1.0 },
-    { note: "F4", duration: 1.0 },
-    { note: "G4", duration: 1.0 },
-    { note: "F4", duration: 2.0 },
+    { note: "F4", duration: 1.0, chord: ["F3", "A3", "C4"] },
+    { note: "G4", duration: 1.0, chord: ["G3", "B3", "D4"] },
+    { note: "F4", duration: 2.0, chord: ["C3", "E3", "G3"] },
     { note: "REST", duration: 2.0 }
 ];
 
 const totalBeats = happyBirthdayNotes.reduce((sum, n) => sum + n.duration, 0);
+
+function playPadChord(chordNotes, duration) {
+    if (!audioCtx || audioCtx.state === 'suspended' || !chordNotes) return;
+    
+    const now = audioCtx.currentTime;
+    
+    chordNotes.forEach(noteName => {
+        const freq = NOTE_FREQS[noteName];
+        if (!freq) return;
+        
+        const osc = audioCtx.createOscillator();
+        const filter = audioCtx.createBiquadFilter();
+        const gainNode = audioCtx.createGain();
+        
+        osc.type = 'triangle'; // Warm, soft waveform
+        osc.frequency.setValueAtTime(freq, now);
+        
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(320, now); // Low pass filter for warm analog feel
+        
+        // Very soft backing envelope with a slow attack swell
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(0.015, now + 0.8);
+        gainNode.gain.setValueAtTime(0.015, now + duration - 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+        
+        osc.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(synthVolumeNode);
+        
+        osc.start(now);
+        osc.stop(now + duration);
+    });
+}
 
 function initSynth() {
     if (audioCtx) return;
@@ -669,6 +703,11 @@ function playMelodyLoop() {
             playMusicBoxNote(freq, currentNote.duration * beatDuration);
             spawnFloatingNoteUI();
         }
+    }
+    
+    if (currentNote.chord) {
+        // Play soft chord accompaniment floating warm background
+        playPadChord(currentNote.chord, 2.5 * beatDuration);
     }
     
     const progressPercent = (elapsedBeats / totalBeats) * 100;

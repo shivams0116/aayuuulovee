@@ -371,11 +371,13 @@ body.scrolled-night .section-subtitle {
 }
 
 .hero-subtitle {
-    font-size: 1.3rem;
-    color: var(--color-text-muted);
-    font-weight: 400;
+    font-size: 1.45rem;
+    color: #3e3332; /* Bolder, higher contrast color */
+    font-weight: 600; /* Bolder font weight so it stands out clearly */
     margin-bottom: 3.5rem;
-    max-width: 580px;
+    max-width: 620px;
+    line-height: 1.65;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.95); /* Crisp shadow on light backgrounds */
 }
 
 /* Live Counter Card */
@@ -1598,8 +1600,10 @@ body.scrolled-light .drifting-text {
     }
     
     .hero-subtitle {
-        font-size: 1.1rem;
+        font-size: 1.25rem;
+        font-weight: 600;
         margin-bottom: 2.5rem;
+        color: #3e3332;
     }
     
     .counter-card {
